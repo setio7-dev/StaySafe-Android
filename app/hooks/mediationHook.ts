@@ -37,7 +37,7 @@ export default function useMediationHook() {
         const fetchMediation = async () => {
             try {
                 const { data } = await SupabaseAPI.from("mediation").select();
-                setMediation(data);
+                setMediation(data as any);
             } catch (error) {
                 console.error(error);
             }
