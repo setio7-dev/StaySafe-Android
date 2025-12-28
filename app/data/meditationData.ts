@@ -1,0 +1,23 @@
+export const meditationData: string[] = [
+  "Tunggu Sebentar.",
+  "Selamat datang di sesi meditasi ini. Ambil posisi nyaman dan pejamkan mata.",
+  "Tarik napas dalam melalui hidung, dan hembuskan perlahan melalui mulut.",
+  "Rasakan setiap tarikan napas masuk ke tubuh, membawa ketenangan.",
+  "Biarkan pikiranmu tenang, lepaskan semua beban yang ada di kepala.",
+  "Fokus pada napas, rasakan dada dan perut mengembang dan mengempis.",
+  "Jika ada pikiran yang muncul, biarkan saja, kembalikan fokus ke napas.",
+  "Perhatikan sensasi di tubuh, mulai dari kepala hingga ujung kaki.",
+  "Rasakan berat tubuhmu di atas kursi atau matras, rilekskan setiap otot.",
+  "Tarik napas dalam, tahan sebentar, dan hembuskan perlahan-lahan.",
+  "Bayangkan cahaya hangat memenuhi tubuhmu, menenangkan setiap sel.",
+  "Rasakan ketenangan itu menyebar ke seluruh tubuh dan pikiran.",
+  "Biarkan diri merasakan kedamaian dan keamanan di saat ini.",
+  "Fokus pada detik ini, lepaskan kekhawatiran masa depan dan masa lalu.",
+  "Nikmati rasa rileks yang mendalam di seluruh tubuh.",
+  "Ambil napas dalam dan hembuskan, rasakan ketenangan semakin dalam.",
+  "Setiap hembusan napas membawa rasa lega dan ringan pada pikiranmu.",
+  "Bayangkan dirimu berada di tempat yang aman dan damai.",
+  "Rasakan energi positif memenuhi tubuh dan pikiranmu.",
+  "Tarik napas lagi, dan lepaskan ketegangan yang masih tersisa.",
+  "Ketika siap, buka mata perlahan dan bawa ketenangan ini ke sisa harimu."
+];
