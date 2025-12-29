@@ -12,10 +12,10 @@ import { PieChart } from "react-native-gifted-charts"
 import ModalJournal from '@/app/components/ModalJournal'
 
 export default function Journal() {
-    const { setAvailableDay, availableDay, getJournalByDate, journal, isLoading, showJournal, handleMoodAnalysis, moodAnalysis } = useJournalHook();
+    const { setAvailableDay, availableDay, getJournalByDate, journal, isLoading, isLoadingLoader, showJournal, handleMoodAnalysis, moodAnalysis } = useJournalHook();
     const latestAnalysis = moodAnalysis?.[moodAnalysis.length - 1];
     const [selectedJournal, setSelectedJournal] = useState<any>(null);
-    const [showDetail, setShowDetail] = useState(false);
+    const [showDetail, setShowDetail] = useState(false);    
     const pieData = latestAnalysis
         ? [
             {
@@ -31,9 +31,9 @@ export default function Journal() {
         ]
         : [];
 
-    setTimeout(() => {
+    if (isLoadingLoader) {
         return <Loader fullScreen={true} text='Memuat...' />
-    }, 3000);
+    }
     return (
         <CustomSafeAreaView>
             <BackPage type={false} title='Jurnal Harian' />

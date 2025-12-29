@@ -128,52 +128,52 @@ export default function useMapsHooks() {
         }
     }
 
-    useEffect(() => {
-        const fetchMaps = async () => {
-            const { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') return;
+    const fetchMaps = async () => {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') return;
 
-            const loc = await Location.getCurrentPositionAsync({});
-            const address = await Location.reverseGeocodeAsync({
-                latitude: loc.coords.latitude,
-                longitude: loc.coords.longitude,
-            });
+        const loc = await Location.getCurrentPositionAsync({});
+        const address = await Location.reverseGeocodeAsync({
+            latitude: loc.coords.latitude,
+            longitude: loc.coords.longitude,
+        });
 
-            if (address.length > 0) {
-                const a = address[0];
-                let location = "";
+        if (address.length > 0) {
+            const a = address[0];
+            let location = "";
 
-                if (pathname === "/pages/maps/maps") {
-                    location = `${a.formattedAddress ?? ''}`;
-                } else {
-                    location = `${a.district ?? ''}`;
-                }
-                setMyLocation(location);
+            if (pathname === "/pages/maps/maps") {
+                location = `${a.formattedAddress ?? ''}`;
+            } else {
+                location = `${a.district ?? ''}`;
             }
-
-            const categories = "service.police,service.fire_station,service.post.office,healthcare.hospital,healthcare.clinic_or_praxis,office.government";
-            const url = `https://api.geoapify.com/v2/places?categories=${categories}&filter=circle:${loc.coords.longitude},${loc.coords.latitude},700&limit=50&apiKey=${GEOAPIFY_KEY}`;
-            const responsePlace = await fetch(url);
-            const resData = await responsePlace.json();
-            setSuggestionPlace(resData.features)
-
-
-            const userBase64 = await ImageToBase64(userImage);
-            const dangerBase64 = await ImageToBase64(dangerImage);
-            const positionBase64 = await ImageToBase64(positionImage);
-
-            setIcons({
-                user: `data:image/png;base64,${userBase64}`,
-                danger: `data:image/png;base64,${dangerBase64}`,
-                position: `data:image/png;base64,${positionBase64}`,
-            });
-
-            setLocation({
-                lat: loc.coords.latitude,
-                lng: loc.coords.longitude,
-            });
+            setMyLocation(location);
         }
 
+        const categories = "service.police,service.fire_station,service.post.office,healthcare.hospital,healthcare.clinic_or_praxis,office.government";
+        const url = `https://api.geoapify.com/v2/places?categories=${categories}&filter=circle:${loc.coords.longitude},${loc.coords.latitude},700&limit=50&apiKey=${GEOAPIFY_KEY}`;
+        const responsePlace = await fetch(url);
+        const resData = await responsePlace.json();
+        setSuggestionPlace(resData.features)
+
+
+        const userBase64 = await ImageToBase64(userImage);
+        const dangerBase64 = await ImageToBase64(dangerImage);
+        const positionBase64 = await ImageToBase64(positionImage);
+
+        setIcons({
+            user: `data:image/png;base64,${userBase64}`,
+            danger: `data:image/png;base64,${dangerBase64}`,
+            position: `data:image/png;base64,${positionBase64}`,
+        });
+
+        setLocation({
+            lat: loc.coords.latitude,
+            lng: loc.coords.longitude,
+        });
+    }
+
+    useEffect(() => {
         fetchMaps();
         fetchZones();
     }, [pathname]);
@@ -273,6 +273,7 @@ export default function useMapsHooks() {
         panResponder,
         fetchZones,
         handleMessageDistance,
-        isWarning
+        isWarning,
+        fetchMaps
     }
 }

@@ -14,16 +14,25 @@ export default function useJournalHook() {
     const [showJournal, setShowJournal] = useState(false);
     const [moodUser, setMoodUser] = useState<string>("");
     const [desc, setDesc] = useState<string>("");
-    const [isLoading, setIsLoading] = useState(false);   
+    const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingLoader, setIsLoadingLoader] = useState(true);
     const { user } = useAuthHook();
     const navigate = useRouter();
-    const location = usePathname();    
+    const location = usePathname();
 
     const moodRadio = [
         { label: "😊 Senang", value: "senang", color: "#22C55E" },
         { label: "😪 Sedih", value: "sedih", color: "#3B82F6" },
         { label: "😡 Marah", value: "marah", color: "#EF4444" },
     ];
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsLoadingLoader(false);
+        }, 3000);
+
+        return () => clearTimeout(timer); 
+    }, []);
 
     const fetchJournal = async () => {
         try {
@@ -225,17 +234,17 @@ export default function useJournalHook() {
 
             if (parts) {
                 rawText = parts
-                .map((p: any) => p.text)
-                .join("")
-                .trim();
+                    .map((p: any) => p.text)
+                    .join("")
+                    .trim();
             }
 
             let cleanText;
             if (rawText) {
                 cleanText = rawText
-                .replace(/```json/g, "")
-                .replace(/```/g, "")
-                .trim();
+                    .replace(/```json/g, "")
+                    .replace(/```/g, "")
+                    .trim();
             }
 
             if (cleanText) {
@@ -290,8 +299,8 @@ export default function useJournalHook() {
                     suggestion: analysisResult.suggestion,
                 }
             ])
-            .eq("id", activeAnalysis.id)
-            .select()
+                .eq("id", activeAnalysis.id)
+                .select()
 
             ToastMessage({
                 type: "success",
@@ -325,5 +334,6 @@ export default function useJournalHook() {
         moodRadio,
         moodAnalysis,
         handleMoodAnalysis,
+        isLoadingLoader
     }
 }

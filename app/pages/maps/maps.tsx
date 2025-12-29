@@ -10,11 +10,12 @@ import { useFocusEffect } from 'expo-router';
 import { useCallback } from 'react';
 
 export default function Maps() {
-    const { generateMapHTML, location, icons, myLocation, panResponder, suggestionPlace, heightAnim, handleGoToPlace, webViewRef, fetchZones, handleMessageDistance, isWarning } = useMapsHooks();
+    const { generateMapHTML, location, icons, myLocation, panResponder, suggestionPlace, heightAnim, handleGoToPlace, webViewRef, fetchZones, handleMessageDistance, isWarning, fetchMaps } = useMapsHooks();
     useFocusEffect(
         useCallback(() => {
             fetchZones()
-        }, [fetchZones])
+            fetchMaps()
+        }, [fetchZones, fetchMaps])
     )
 
     if (!location || !icons || !suggestionPlace) {

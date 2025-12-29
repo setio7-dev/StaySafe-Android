@@ -24,7 +24,7 @@ const { width } = Dimensions.get("window");
 export default function Home() {
   const { user } = useUserHook();
   const { news } = useNewsHook();
-  const { location, icons, generateMapHTML, myLocation, fetchZones, handleMessageDistance } = useMapsHooks();
+  const { location, icons, generateMapHTML, myLocation, fetchZones, handleMessageDistance, isWarning, fetchMaps } = useMapsHooks();
   const { availableDay, setAvailableDay } = useJournalHook();
   const { community, isLoading, handleJoinCommunity } = useCommunityHook();
   const [currentIndex, setCurrentIndex] = useState<number>(0);
@@ -44,7 +44,8 @@ export default function Home() {
   useFocusEffect(
       useCallback(() => {
           fetchZones()
-      }, [fetchZones])
+          fetchMaps()
+      }, [fetchZones, fetchMaps])
   )
 
   if (!user || !news || !community || !location) {
@@ -80,8 +81,8 @@ export default function Home() {
                     <Text className='text-primary text-[16px] font-poppins_semibold'>{myLocation}</Text>
                     <Text className='text-gray text-[10px] font-poppins_medium'>Status</Text>
                     <View className='flex flex-row gap-2 items-center'>
-                      <View className='bg-red p-1.5 rounded-full'/>
-                      <Text className='text-red text-[12px] font-poppins_medium'>Bahaya</Text>
+                      <View className={`${isWarning ? 'bg-red' : 'bg-green'} p-1.5 rounded-full`}/>
+                      <Text className={`${isWarning ? 'text-red' : 'text-green'} text-[12px] font-poppins_medium`}>{isWarning ? 'Waspada' : 'Aman'}</Text>
                     </View>
                   </View>
                   <View className='flex flex-row justify-between items-end'>
