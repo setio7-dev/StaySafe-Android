@@ -24,7 +24,7 @@ const { width } = Dimensions.get("window");
 export default function Home() {
   const { user } = useUserHook();
   const { news } = useNewsHook();
-  const { location, icons, generateMapHTML } = useMapsHooks();
+  const { location, icons, generateMapHTML, myLocation } = useMapsHooks();
   const { availableDay, setAvailableDay } = useJournalHook();
   const { community, isLoading, handleJoinCommunity } = useCommunityHook();
   const [currentIndex, setCurrentIndex] = useState<number>(0);
@@ -70,7 +70,7 @@ export default function Home() {
                 <View className='flex-1 flex flex-col justify-between'>
                   <View className='flex flex-col flex-1'>
                     <Text className='text-gray text-[12px] font-poppins_medium'>Lokasi Kamu</Text>
-                    <Text className='text-primary text-[16px] font-poppins_semibold'>Senen, Jakarta Pusat</Text>
+                    <Text className='text-primary text-[16px] font-poppins_semibold'>{myLocation}</Text>
                     <Text className='text-gray text-[10px] font-poppins_medium'>Status</Text>
                     <View className='flex flex-row gap-2 items-center'>
                       <View className='bg-red p-1.5 rounded-full'/>
@@ -78,7 +78,7 @@ export default function Home() {
                     </View>
                   </View>
                   <View className='flex flex-row justify-between items-end'>
-                    <ButtonPrimary type='gradient' textSize={10} padding={8} rounded={10} width={120} text='Periksa Lokasimu' />                    
+                    <ButtonPrimary onClick={() => navigate.push("/pages/maps/maps")} type='gradient' textSize={10} padding={8} rounded={10} width={120} text='Periksa Lokasimu' />                    
                     <View className='flex flex-col justify-center items-center'>
                       <Image source={cloud} resizeMode='cover' className='w-12 h-10'/>
                       <Text className='text-[12px] font-poppins_medium text-primary'>35°C</Text>

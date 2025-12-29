@@ -5,11 +5,16 @@ import positionImage from "@/assets/images/maps/position.png";
 import { ImageToBase64 } from '@/app/utils/imageConvert';
 import { useEffect, useState } from 'react';
 import { SupabaseAPI } from '../server/supabase';
+import { usePathname } from 'expo-router';
 
 export default function useMapsHooks() {
     const [location, setLocation] = useState<any>(null);
     const [icons, setIcons] = useState<any>(null);
     const [zones, setZones] = useState<zoneProps[]>([]);
+    const [myLocation, setMyLocation] = useState<string>("");
+    const pathname = usePathname();
+    const [suggestionPlace, setSuggestionPlace] = useState<suggestionPlaceProps[]>([]);
+    const GEOAPIFY_KEY = "24f813a682d2497e89d434b817408858"
 
     const generateMapHTML = (lat: number, lng: number, icons: any) => `
     <!DOCTYPE html>
@@ -64,14 +69,37 @@ export default function useMapsHooks() {
                 </script>
             </body>
         </html>
-    `; 
+    `;
 
     useEffect(() => {
         (async () => {
             const { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') return;
+            if (status !== 'granted') return;           
 
             const loc = await Location.getCurrentPositionAsync({});
+            const address = await Location.reverseGeocodeAsync({
+                latitude: loc.coords.latitude,
+                longitude: loc.coords.longitude,
+            });
+
+            if (address.length > 0) {
+                const a = address[0];
+                let location = "";
+
+                if (pathname === "/pages/maps/maps") {
+                    location = `${a.formattedAddress ?? ''}`;
+                } else {
+                    location = `${a.district ?? ''}`;
+                }
+                setMyLocation(location);
+            }
+
+            const categories = "service.police,service.fire_station,service.post.office,healthcare.hospital,healthcare.clinic_or_praxis,office.government";
+            const url = `https://api.geoapify.com/v2/places?categories=${categories}&filter=circle:${loc.coords.longitude},${loc.coords.latitude},700&limit=50&apiKey=${GEOAPIFY_KEY}`;
+            const responsePlace = await fetch(url);
+            const resData = await responsePlace.json();
+            setSuggestionPlace(resData.features)
+
 
             const userBase64 = await ImageToBase64(userImage);
             const dangerBase64 = await ImageToBase64(dangerImage);
@@ -86,10 +114,10 @@ export default function useMapsHooks() {
                 lng: loc.coords.longitude,
             });
         })();
-    }, []);
+    }, [pathname]);
 
     useEffect(() => {
-        const fetchZones = async() => {
+        const fetchZones = async () => {
             try {
                 const { data } = await SupabaseAPI.from("zones").select();
                 setZones(data);
@@ -105,5 +133,6 @@ export default function useMapsHooks() {
         location,
         icons,
         generateMapHTML,
+        myLocation
     }
 }
