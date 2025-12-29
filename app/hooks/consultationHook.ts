@@ -71,14 +71,14 @@ export default function useConsultationHook() {
             try {
                 const { data } = await SupabaseAPI.from("doctor").select(`*, user_id(*)`);
                 if (search) {
-                    const dataFilter = data.filter((item: doctorProps) => {
+                    const dataFilter = data?.filter((item: doctorProps) => {
                         const filter = item.user_id.name.toLowerCase().includes(search.toLowerCase());
                         return filter;
                     });
 
-                    setDoctor(dataFilter);
+                    setDoctor(dataFilter as any);
                 } else {
-                    setDoctor(data);
+                    setDoctor(data as any);
                 }
             } catch (error) {
                 console.error(error);
@@ -92,7 +92,7 @@ export default function useConsultationHook() {
     const fetchMyDoctor = async () => {
         try {
             const { data } = await SupabaseAPI.from("conversation").select(`*, receiver(*), message(*, sender(*))`).eq("sender", user?.id).order("created_at", { ascending: false });
-            setMyDoctor(data);
+            setMyDoctor(data as any);
         } catch (error) {
             console.error(error);
         }
@@ -115,9 +115,9 @@ export default function useConsultationHook() {
                     sender: user?.id,
                     receiver: receiverId
                 }
-            ]);
+            ]).select().single()
 
-            navigate.push({ pathname: "/pages/consultation/consultationmessage", params: { id: newConversation.id } });
+            navigate.push({ pathname: "/pages/consultation/consultationmessage", params: { id: newConversation?.id } });
             return;
         } catch (error: any) {
             ToastMessage({
@@ -139,6 +139,14 @@ export default function useConsultationHook() {
     const handlePostMessage = async (sender: number) => {
         try {
             let uploadImage;
+            if (message === "") {
+                ToastMessage({
+                    type: "error",
+                    text: "Pesan Wajib Diisi!"
+                });
+                return;
+            }
+
             if (image) {
                 const formData = new FormData();
                 formData.append("upload_preset", "staysafe");

@@ -92,21 +92,23 @@ declare global {
       created_at: any;
     }
 
-    interface moodWeeklyProps {
+    interface moodAnalysisProps {
       id: number;
       user_id: authProps;
       mood: moodProps[];
-      mood_user: string;
-      desc: string;
+      mood_user: string;  
+      summary: string;
+      suggestion: string;
+      statistic: number;    
       created_at: any;
     }
 
     interface moodProps {
       id: number;
       user_id: authProps;
-      mood_weekly_id: moodWeeklyProps;
-      suggestion: string;
-      statistic: number;
+      mood_analysis_id: moodAnalysisProps;
+      mood: string;
+      desc: string;      
       created_at: any;
     }
 }
