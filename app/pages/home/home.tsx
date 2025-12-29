@@ -1,6 +1,6 @@
 import CustomSafeAreaView from '@/app/ui/safeAreaView'
 import PrimaryGradient from '@/app/utils/primaryGradient'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Dimensions, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import logo from "@/assets/images/home/logo.png";
 import cloud from "@/assets/images/home/cloud.png";
@@ -13,7 +13,7 @@ import useNewsHook from '@/app/hooks/newsHook';
 import { formatDate } from '@/app/utils/formatDate';
 import useCommunityHook from '@/app/hooks/communityHook';
 import journal from "@/assets/images/home/journal.png"
-import { useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import ModalJournal from '@/app/components/ModalJournal';
 import useJournalHook from '@/app/hooks/journalHook';
 import useMapsHooks from '@/app/hooks/mapsHooks';
@@ -24,7 +24,7 @@ const { width } = Dimensions.get("window");
 export default function Home() {
   const { user } = useUserHook();
   const { news } = useNewsHook();
-  const { location, icons, generateMapHTML, myLocation } = useMapsHooks();
+  const { location, icons, generateMapHTML, myLocation, fetchZones, handleMessageDistance } = useMapsHooks();
   const { availableDay, setAvailableDay } = useJournalHook();
   const { community, isLoading, handleJoinCommunity } = useCommunityHook();
   const [currentIndex, setCurrentIndex] = useState<number>(0);
@@ -40,6 +40,12 @@ export default function Home() {
 
     return () => clearInterval(interval);
   }, [currentIndex]);
+
+  useFocusEffect(
+      useCallback(() => {
+          fetchZones()
+      }, [fetchZones])
+  )
 
   if (!user || !news || !community || !location) {
     return <Loader text='Memuat...' fullScreen={true}/>
@@ -65,6 +71,7 @@ export default function Home() {
                       style={{ flex: 1 }}
                       scalesPageToFit={false}
                       javaScriptEnabled
+                      onMessage={(event) => handleMessageDistance(event)}
                   />  
                 </View>
                 <View className='flex-1 flex flex-col justify-between'>
