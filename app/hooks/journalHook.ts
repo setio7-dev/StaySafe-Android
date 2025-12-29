@@ -5,6 +5,7 @@ import { SupabaseAPI } from '../server/supabase';
 import ToastMessage from '../utils/toastMessage';
 import { translateError } from '../utils/translateError';
 import { GoogleGenAI } from "@google/genai";
+import { usePathname, useRouter } from 'expo-router';
 
 export default function useJournalHook() {
     const [journal, setJournal] = useState<moodProps[] | null>([]);
@@ -15,6 +16,8 @@ export default function useJournalHook() {
     const [desc, setDesc] = useState<string>("");
     const [isLoading, setIsLoading] = useState(false);   
     const { user } = useAuthHook();
+    const navigate = useRouter();
+    const location = usePathname();    
 
     const moodRadio = [
         { label: "😊 Senang", value: "senang", color: "#22C55E" },
@@ -156,8 +159,11 @@ export default function useJournalHook() {
             setAvailableDay(false);
             setShowJournal(false);
 
-            fetchJournal();
+            if (location === "/pages/journal/journal") {
+                navigate.push("/pages/journal/journal");
+            }
 
+            fetchJournal();
         } catch (error: any) {
             ToastMessage({
                 type: "error",
@@ -190,7 +196,7 @@ export default function useJournalHook() {
             ${journalText}
 
             TUGAS:
-            1. Buat ringkasan kondisi emosional (2–3 kalimat, bahasa Indonesia).
+            1. Buat ringkasan kondisi emosional (5-6 kalimat, bahasa Indonesia).
             2. Buat 1 saran singkat yang suportif dan realistis.
 
             ATURAN WAJIB:
@@ -256,7 +262,7 @@ export default function useJournalHook() {
             if (!activeAnalysis) {
                 ToastMessage({
                     type: "error",
-                    text: "Jurnal Kamu Sudah Dianalisis, Kembali Lagi Besok!"
+                    text: "Jurnal Kamu Sudah Dianalisis / Belum Dianalisis!"
                 })
                 return;
             }
@@ -291,6 +297,8 @@ export default function useJournalHook() {
                 type: "success",
                 text: "Analisis Selesai"
             })
+
+            fetchMoodAnalysis();
         } catch (error: any) {
             ToastMessage({
                 type: "error",

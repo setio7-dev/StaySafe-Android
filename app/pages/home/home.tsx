@@ -14,12 +14,18 @@ import { formatDate } from '@/app/utils/formatDate';
 import useCommunityHook from '@/app/hooks/communityHook';
 import journal from "@/assets/images/home/journal.png"
 import { useRouter } from 'expo-router';
+import ModalJournal from '@/app/components/ModalJournal';
+import useJournalHook from '@/app/hooks/journalHook';
+import useMapsHooks from '@/app/hooks/mapsHooks';
+import WebView from 'react-native-webview';
 
 const { width } = Dimensions.get("window");
 
 export default function Home() {
   const { user } = useUserHook();
   const { news } = useNewsHook();
+  const { location, icons, generateMapHTML } = useMapsHooks();
+  const { availableDay, setAvailableDay } = useJournalHook();
   const { community, isLoading, handleJoinCommunity } = useCommunityHook();
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const scrollRef = useRef<ScrollView>(null);
@@ -35,12 +41,13 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [currentIndex]);
 
-  if (!user || !news || !community) {
+  if (!user || !news || !community || !location) {
     return <Loader text='Memuat...' fullScreen={true}/>
   }
 
   return (
     <CustomSafeAreaView>
+        <ModalJournal show={availableDay} onClose={() => setAvailableDay(false)}/>
         <ScrollView>
           <PrimaryGradient className='py-8 px-6 flex flex-col gap-4' roundedBottom={12}>
               <Image source={logo} className='w-[160px] h-[70px]'/>
@@ -49,7 +56,17 @@ export default function Home() {
                   <Text className='font-poppins_medium text-white text-[14px]'>Gimana Kabarmu?</Text>
               </View>
               <View className='w-full rounded-md bg-white mt-4 h-[160px] flex flex-row justify-between p-4 gap-4'>
-                <View className='bg-gray w-[120px] h-full border-2 border-secondary rounded-lg'/>
+                <View className='w-[120px] h-full border-2 border-secondary rounded-lg'>
+                  <WebView
+                      originWhitelist={['*']}
+                      source={{
+                          html: generateMapHTML(location?.lat, location?.lng, icons),
+                      }}
+                      style={{ flex: 1 }}
+                      scalesPageToFit={false}
+                      javaScriptEnabled
+                  />  
+                </View>
                 <View className='flex-1 flex flex-col justify-between'>
                   <View className='flex flex-col flex-1'>
                     <Text className='text-gray text-[12px] font-poppins_medium'>Lokasi Kamu</Text>

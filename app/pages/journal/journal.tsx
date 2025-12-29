@@ -1,19 +1,21 @@
 import useJournalHook from '@/app/hooks/journalHook'
 import BackPage from '@/app/ui/backPage'
 import ButtonPrimary from '@/app/ui/buttonPrimary'
-import FormInput from '@/app/ui/formInput'
 import CustomSafeAreaView from '@/app/ui/safeAreaView'
 import Loader from '@/app/utils/loader'
-import React from 'react'
+import React, { useState } from 'react'
 import { Image, Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import { Calendar } from "react-native-calendars"
 import journalMood from "@/assets/images/journal/mood.png"
 import PrimaryGradient from '@/app/utils/primaryGradient'
 import { PieChart } from "react-native-gifted-charts"
+import ModalJournal from '@/app/components/ModalJournal'
 
 export default function Journal() {
-    const { availableDay, setAvailableDay, getJournalByDate, journal, moodUser, setMoodUser, desc, setDesc, handlePostJournal, isLoading, user, moodRadio, showJournal, handleMoodAnalysis, moodAnalysis } = useJournalHook();
+    const { setAvailableDay, availableDay, getJournalByDate, journal, isLoading, showJournal, handleMoodAnalysis, moodAnalysis } = useJournalHook();
     const latestAnalysis = moodAnalysis?.[moodAnalysis.length - 1];
+    const [selectedJournal, setSelectedJournal] = useState<any>(null);
+    const [showDetail, setShowDetail] = useState(false);
     const pieData = latestAnalysis
         ? [
             {
@@ -29,45 +31,31 @@ export default function Journal() {
         ]
         : [];
 
-    if (!journal || !user) {
+    setTimeout(() => {
         return <Loader fullScreen={true} text='Memuat...' />
-    }
+    }, 3000);
     return (
         <CustomSafeAreaView>
             <BackPage type={false} title='Jurnal Harian' />
-            <Modal visible={availableDay} transparent animationType="fade">
+            <ModalJournal show={availableDay} onClose={() => setAvailableDay(false)} />
+            <Modal visible={showDetail} transparent animationType="fade">
                 <View className="flex-1 bg-black/40 justify-center items-center">
-                    <View className="bg-white p-6 rounded-xl w-[320px] relative">
-                        <TouchableOpacity onPress={() => setAvailableDay(false)} className='absolute bg-red w-8 h-8 rounded-full flex justify-center items-center -top-2 -right-2'>
-                            <Text className='font-poppins_semibold text-white text-[14px]'>X</Text>
-                        </TouchableOpacity>
-                        <View className='flex flex-col gap-4'>
-                            <Image source={journalMood} className='w-20 h-20 mx-auto' />
-                            <Text className='font-poppins_semibold text-primary text-[18px] text-center'>Perasaan Anda Hari Ini?</Text>
-                        </View>
-                        <View className='flex flex-col mt-6 gap-6'>
-                            <View className=''>
-                                {moodRadio.map((item, index) => (
-                                    <TouchableOpacity
-                                        key={index}
-                                        onPress={() => setMoodUser(item.value)}
-                                        className="flex-row items-center mb-3"
-                                    >
-                                        <View className="w-[22px] h-[22px] rounded-full border-2 border-secondary items-center justify-center mr-2.5">
-                                            {moodUser === item.value && (
-                                                <View className="w-3 h-3 rounded-full bg-secondary" />
-                                            )}
-                                        </View>
+                    <View className="bg-white p-6 rounded-xl w-[300px]">
+                        <Text className="text-[16px] font-poppins_semibold text-secondary mb-2">
+                            Perasaan: {selectedJournal?.mood}
+                        </Text>
 
-                                        <Text className="text-[14px] font-poppins_medium text-black">
-                                            {item.label}
-                                        </Text>
-                                    </TouchableOpacity>
-                                ))}
-                            </View>
-                            <FormInput multiline={true} value={desc} onChange={(e) => setDesc(e)} text='Deskripsi' placeholder='Deskripsi Perasaan Anda...' />
-                            <ButtonPrimary onClick={() => handlePostJournal()} loading={isLoading} text='Kirim' type='gradient' widthFull padding={10} className='mt-6' />
-                        </View>
+                        <Text className="text-[14px] font-poppins_regular text-black">
+                            {selectedJournal?.desc}
+                        </Text>
+                        <TouchableOpacity
+                            onPress={() => setShowDetail(false)}
+                            className="mt-6 bg-secondary py-2 rounded-lg"
+                        >
+                            <Text className="text-white text-center font-poppins_semibold">
+                                Tutup
+                            </Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </Modal>
@@ -81,48 +69,58 @@ export default function Journal() {
                         <Calendar
                             dayComponent={({ date, state }) => {
                                 const journalToday = getJournalByDate(date!.dateString);
+                                const isDisabled = state === "disabled";
 
                                 return (
-                                    <View
-                                        style={{
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            paddingVertical: 4,
-                                            borderRadius: 8,
-                                            backgroundColor: journalToday ? "#137DD3" : "transparent",
-                                            width: 40,
-                                            height: 48,
+                                    <TouchableOpacity
+                                        disabled={!journalToday || isDisabled}
+                                        onPress={() => {
+                                            setSelectedJournal(journalToday);
+                                            setShowDetail(true);
                                         }}
+                                        activeOpacity={0.7}
                                     >
-                                        {journalToday && (
+                                        <View
+                                            style={{
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                                paddingVertical: 4,
+                                                borderRadius: 8,
+                                                backgroundColor: journalToday ? "#137DD3" : "transparent",
+                                                width: 40,
+                                                height: 48,
+                                                opacity: isDisabled ? 0.4 : 1,
+                                            }}
+                                        >
+                                            {journalToday && (
+                                                <Text
+                                                    style={{
+                                                        fontSize: 8,
+                                                        color: "white",
+                                                        fontWeight: "600",
+                                                        marginBottom: 2,
+                                                    }}
+                                                    numberOfLines={1}
+                                                >
+                                                    {journalToday.mood}
+                                                </Text>
+                                            )}
+
                                             <Text
                                                 style={{
-                                                    fontSize: 8,
-                                                    color: "white",
-                                                    fontWeight: "600",
-                                                    marginBottom: 2,
-                                                }}
-                                                numberOfLines={1}
-                                            >
-                                                {journalToday.mood}
-                                            </Text>
-                                        )}
-
-                                        <Text
-                                            style={{
-                                                color:
-                                                    state === "disabled"
+                                                    color: isDisabled
                                                         ? "#A1A1AA"
                                                         : journalToday
                                                             ? "white"
-                                                            : "",
-                                                fontSize: 14,
-                                                fontWeight: "600",
-                                            }}
-                                        >
-                                            {date?.day}
-                                        </Text>
-                                    </View>
+                                                            : "#000",
+                                                    fontSize: 14,
+                                                    fontWeight: "600",
+                                                }}
+                                            >
+                                                {date?.day}
+                                            </Text>
+                                        </View>
+                                    </TouchableOpacity>
                                 );
                             }}
                         />
@@ -155,7 +153,7 @@ export default function Journal() {
                         />
                     )}
                 </View>
-                <View className='mt-8'>
+                <View className='mt-4'>
                     {showJournal && (
                         <PrimaryGradient className='flex flex-row justify-between items-center p-4 gap-2' roundedBottom={8} roundedTop={8}>
                             <Image source={journalMood} resizeMode='cover' className='w-[110px] h-[110px]' />
@@ -169,10 +167,11 @@ export default function Journal() {
                         </PrimaryGradient>
                     )}
                 </View>
-                <View className='flex mt-8 flex-col px-6'>
-                    <Text className='font-poppins_semibold text-black text-[18px] text-center'>Analisa Perasaan Kamu</Text>
-                    {moodAnalysis ? (
+                <ButtonPrimary loading={isLoading} text='Analisis Jurnal' textSize={14} padding={12} type='gradient' width={200} className='mx-auto mt-8' onClick={() => handleMoodAnalysis()} />
+                <View className='flex mt-10 flex-col px-6'>
+                    {latestAnalysis && (
                         <View className='flex flex-col justify-center items-center mt-4'>
+                            <Text className='font-poppins_semibold text-black text-[18px] text-center'>Analisa Perasaan Kamu</Text>
                             <PieChart
                                 data={pieData}
                                 donut
@@ -200,23 +199,32 @@ export default function Journal() {
                             />
                             <View className='flex gap-6 flex-col w-full mt-6'>
                                 <View className='bg-primary/80 border-2 border-primary p-4 rounded-lg'>
-                                    <Text className='text-white font-poppins_semibold text-[14px]'>Penjelasan: </Text> 
-                                    <Text className='text-white font-poppins_medium text-[12px] text-justify'>{latestAnalysis?.summary}</Text> 
+                                    <Text className='text-white font-poppins_semibold text-[14px]'>Penjelasan: </Text>
+                                    <Text className='text-white font-poppins_medium text-[12px] text-justify'>{latestAnalysis?.summary}</Text>
                                 </View>
                                 <View className='bg-primary/80 border-2 border-primary p-4 rounded-lg'>
-                                    <Text className='text-white font-poppins_semibold text-[14px]'>Saran: </Text> 
-                                    <Text className='text-white font-poppins_medium text-[12px] text-justify'>{latestAnalysis?.suggestion}</Text> 
+                                    <Text className='text-white font-poppins_semibold text-[14px]'>Saran: </Text>
+                                    <Text className='text-white font-poppins_medium text-[12px] text-justify'>{latestAnalysis?.suggestion}</Text>
                                 </View>
                             </View>
                         </View>
-                    ) : (
-                        <Text className='font-poppins_medium text-black text-[14px] text-center mt-6'>Belum Ada Jurnal Yang Dianalisis</Text>
                     )}
-                    <ButtonPrimary loading={isLoading} text='Analisis Jurnal' textSize={14} padding={12} type='gradient' width={200} className='mx-auto mt-8' onClick={() => handleMoodAnalysis()} />
                 </View>
-                <View className='flex mt-8 flex-col px-6'>
-                    <Text className='font-poppins_semibold text-black text-[18px] text-center'>Analisa Perasaan Kamu</Text>
-                </View>
+                {latestAnalysis && (
+                    <View className='flex mt-12 flex-col px-6'>
+                        <Text className='font-poppins_semibold text-black text-[18px] text-center'>Riwayat Analisis</Text>
+                        <View className='flex flex-col gap-6 mt-6'>
+                            {moodAnalysis?.map((item, index) => (
+                                <View key={index} className='bg-secondary/80 border-2 border-secondary p-4 rounded-lg flex flex-col gap-2'>
+                                    <Text className='font-poppins_semibold text-[18px] mb-4 text-white text-center'>Analisis Ke-{index + 1}</Text>
+                                    <Text className='font-poppins_medium text-white text-[14px]'>Mood : {item.mood_user}</Text>
+                                    <Text className='font-poppins_medium text-justify text-white text-[12px]'>Penjelasan : {item.summary}</Text>
+                                    <Text className='font-poppins_medium text-justify text-white text-[12px]'>Saran : {item.suggestion}</Text>
+                                </View>
+                            ))}
+                        </View>
+                    </View>
+                )}
             </ScrollView>
         </CustomSafeAreaView>
     )

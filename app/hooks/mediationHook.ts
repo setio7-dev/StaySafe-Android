@@ -33,20 +33,20 @@ export default function useMediationHook() {
         fetchDurations()
     }, [mediation])
 
+    const fetchSigleMediation = async () => {
+        try {
+            const { data } = await SupabaseAPI.from("mediation").select().eq("id", idState).single();
+            setMediationSingle(data);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     useEffect(() => {
         const fetchMediation = async () => {
             try {
                 const { data } = await SupabaseAPI.from("mediation").select();
                 setMediation(data as any);
-            } catch (error) {
-                console.error(error);
-            }
-        }
-
-        const fetchSigleMediation = async () => {
-            try {
-                const { data } = await SupabaseAPI.from("mediation").select().eq("id", idState).single();
-                setMediationSingle(data);
             } catch (error) {
                 console.error(error);
             }
@@ -119,6 +119,7 @@ export default function useMediationHook() {
         isSpeaking,
         speakCurrent,
         stop,
-        setIdState
+        setIdState,
+        fetchSigleMediation
     }
 }

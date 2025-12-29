@@ -8,13 +8,6 @@ declare global {
         image: string;
     }
 
-    type RootStackParamList = {
-      SplashScreen: undefined;
-      Login: undefined;
-      Home: undefined;
-      OnBoarding: undefined;
-    };
-
     interface newsProps {
       id: number;
       title: string;
@@ -109,6 +102,15 @@ declare global {
       mood_analysis_id: moodAnalysisProps;
       mood: string;
       desc: string;      
+      created_at: any;
+    }
+
+    interface zoneProps {
+      id: number;
+      name: string;
+      latitude: string;
+      longitude: string;
+      radius: string;
       created_at: any;
     }
 }

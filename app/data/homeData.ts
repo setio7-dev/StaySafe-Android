@@ -11,7 +11,7 @@ export const homeData = [
         id: 1,
         image: fitur1,
         name: "Pantau",
-        link: ""
+        link: "/pages/maps/maps"
     },
     {
         id: 2,

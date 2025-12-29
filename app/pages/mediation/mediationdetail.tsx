@@ -3,7 +3,7 @@
 import BackPage from '@/app/ui/backPage'
 import CustomSafeAreaView from '@/app/ui/safeAreaView'
 import PrimaryGradient from '@/app/utils/primaryGradient'
-import React, { useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { Image, Text, TouchableOpacity, View, Animated, Easing } from 'react-native'
 import { meditationData } from '@/app/data/meditationData'
 import useMediationHook from '@/app/hooks/mediationHook'
@@ -12,14 +12,21 @@ import { useLocalSearchParams } from 'expo-router/build/hooks'
 import playImage from "@/assets/images/icon/play.png"
 import stopImage from "@/assets/images/icon/stop.png"
 import useAudioPlayer from '@/app/utils/audioPlayer'
+import { useFocusEffect } from 'expo-router'
 
 export default function MediationDetail() {
     const { id } = useLocalSearchParams();
     const { play, pause, isPlaying, position, duration } = useAudioPlayer();
-    const { mediationSingle, setIdState, durationsMusic, currentIndex } = useMediationHook();
+    const { mediationSingle, setIdState, durationsMusic, currentIndex, fetchSigleMediation } = useMediationHook();
 
     const rotateAnim = useRef(new Animated.Value(0)).current
     const fadeAnim = useRef(new Animated.Value(0)).current
+
+    useFocusEffect(
+      useCallback(() => {        
+        fetchSigleMediation()
+      }, [fetchSigleMediation])
+    );
 
     useEffect(() => {
         setIdState(id);
@@ -53,7 +60,6 @@ export default function MediationDetail() {
         inputRange: [0, 1],
         outputRange: ['0deg', '360deg']
     })
-
     return (
         <CustomSafeAreaView>
             <BackPage type={false} title='Meditasi' />
