@@ -16,8 +16,8 @@ export const homeData = [
     {
         id: 2,
         image: fitur2,
-        name: "Cerita AR",
-        link: "/pages/bot/ceritaar"
+        name: "Safe Talk",
+        link: "/pages/bot/talk"
     },
     {
         id: 3,

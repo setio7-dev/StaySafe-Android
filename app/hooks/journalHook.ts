@@ -4,8 +4,8 @@ import useAuthHook from './authHook';
 import { SupabaseAPI } from '../server/supabase';
 import ToastMessage from '../utils/toastMessage';
 import { translateError } from '../utils/translateError';
-import { GoogleGenAI } from "@google/genai";
 import { usePathname, useRouter } from 'expo-router';
+import GeminiAPI from '../server/gemini';
 
 export default function useJournalHook() {
     const [journal, setJournal] = useState<moodProps[] | null>([]);
@@ -191,8 +191,6 @@ export default function useJournalHook() {
 
     const handleAnalysisGemini = async (moodParent: moodProps[]) => {
         try {
-            const apiGemini = new GoogleGenAI({ apiKey: "AIzaSyDfWzLswH4hukpacSNpKGxtmdrawoMLqq0" });
-
             const journalText = moodParent.map((item, index) => {
                 const data = `${index + 1}. Mood: ${item.mood}. Desc: ${item.desc}`;
                 return data;
@@ -224,7 +222,7 @@ export default function useJournalHook() {
               "statistic": "isi persentase dari mood yang dominan (1 mood aja dan hanya angka)"
             }`;
 
-            const response = await apiGemini.models.generateContent({
+            const response = await GeminiAPI.models.generateContent({
                 model: "gemini-2.5-flash",
                 contents: prompt,
             });

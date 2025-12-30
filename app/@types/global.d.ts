@@ -183,6 +183,20 @@ declare global {
       coordinates: [number, number];
     };
   }
+
+  interface chatbotConverstionProps {
+    id: number;
+    user_id: authProps;
+    chatbot_message: chatbotMessageProps[];
+    created_at: any;
+  }
+
+  interface chatbotMessageProps {
+    id: number;
+    message: string;
+    conversation_id: number;
+    created_at: any;
+  }
 }
 
 export { };
