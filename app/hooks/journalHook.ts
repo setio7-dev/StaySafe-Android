@@ -282,7 +282,7 @@ export default function useJournalHook() {
                 .eq("user_id", user?.id)
                 .eq("mood_analysis_id", activeAnalysis.id)
 
-            if (activeMood.length < 6) {
+            if (activeMood!.length < 6) {
                 ToastMessage({
                     type: "error",
                     text: "Analisis Jurnal Kamu Belum Tersedia, Tunggulah Beberapa Hari Lagi"
@@ -290,7 +290,7 @@ export default function useJournalHook() {
                 return;
             }
 
-            const analysisResult = await handleAnalysisGemini(activeMood);
+            const analysisResult = await handleAnalysisGemini(activeMood as any);
             await SupabaseAPI.from("mood_analysis").update([
                 {
                     mood_user: analysisResult.mood_primary,
@@ -334,6 +334,8 @@ export default function useJournalHook() {
         moodRadio,
         moodAnalysis,
         handleMoodAnalysis,
-        isLoadingLoader
+        isLoadingLoader,
+        fetchJournal,
+        fetchMoodAnalysis
     }
 }

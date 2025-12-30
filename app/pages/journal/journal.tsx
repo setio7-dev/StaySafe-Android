@@ -3,16 +3,17 @@ import BackPage from '@/app/ui/backPage'
 import ButtonPrimary from '@/app/ui/buttonPrimary'
 import CustomSafeAreaView from '@/app/ui/safeAreaView'
 import Loader from '@/app/utils/loader'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Image, Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import { Calendar } from "react-native-calendars"
 import journalMood from "@/assets/images/journal/mood.png"
 import PrimaryGradient from '@/app/utils/primaryGradient'
 import { PieChart } from "react-native-gifted-charts"
 import ModalJournal from '@/app/components/ModalJournal'
+import { useFocusEffect } from 'expo-router'
 
 export default function Journal() {
-    const { setAvailableDay, availableDay, getJournalByDate, journal, isLoading, isLoadingLoader, showJournal, handleMoodAnalysis, moodAnalysis } = useJournalHook();
+    const { setAvailableDay, availableDay, getJournalByDate, journal, isLoading, isLoadingLoader, showJournal, handleMoodAnalysis, moodAnalysis, fetchJournal, fetchMoodAnalysis } = useJournalHook();
     const latestAnalysis = moodAnalysis?.[moodAnalysis.length - 1];
     const [selectedJournal, setSelectedJournal] = useState<any>(null);
     const [showDetail, setShowDetail] = useState(false);    
@@ -30,6 +31,13 @@ export default function Journal() {
             },
         ]
         : [];
+
+    useFocusEffect(
+        useCallback(() => {
+            fetchJournal()
+            fetchMoodAnalysis()
+        }, [fetchJournal, fetchMoodAnalysis])
+    )
 
     if (isLoadingLoader) {
         return <Loader fullScreen={true} text='Memuat...' />

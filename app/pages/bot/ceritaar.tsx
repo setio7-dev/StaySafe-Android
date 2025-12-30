@@ -1,7 +1,7 @@
 import BackPage from '@/app/ui/backPage'
 import CustomSafeAreaView from '@/app/ui/safeAreaView'
-import { ViroARSceneNavigator } from '@reactvision/react-viro';
-import MaskotScene from '@/app/components/MaskotScene';
+// import { ViroARSceneNavigator } from '@reactvision/react-viro';
+// import MaskotScene from '@/app/components/MaskotScene';
 import React from 'react'
 
 export default function ceritaar() {
