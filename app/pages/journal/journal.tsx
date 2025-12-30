@@ -153,7 +153,7 @@ export default function Journal() {
                         />
                     )}
                 </View>
-                <View className='mt-4'>
+                <View className='mt-8'>
                     {showJournal && (
                         <PrimaryGradient className='flex flex-row justify-between items-center p-4 gap-2' roundedBottom={8} roundedTop={8}>
                             <Image source={journalMood} resizeMode='cover' className='w-[110px] h-[110px]' />

@@ -4,7 +4,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Dimensions, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import logo from "@/assets/images/home/logo.png";
 import cloud from "@/assets/images/home/cloud.png";
-import useUserHook from '@/app/hooks/userHook';
 import ButtonPrimary from '@/app/ui/buttonPrimary';
 import { homeData, postAnimation } from '@/app/data/homeData';
 import lapor from "@/assets/images/home/lapor-cepat.png";
@@ -18,11 +17,12 @@ import ModalJournal from '@/app/components/ModalJournal';
 import useJournalHook from '@/app/hooks/journalHook';
 import useMapsHooks from '@/app/hooks/mapsHooks';
 import WebView from 'react-native-webview';
+import useAuthHook from '@/app/hooks/authHook';
 
 const { width } = Dimensions.get("window");
 
 export default function Home() {
-  const { user } = useUserHook();
+  const { user, fetchUser } = useAuthHook();
   const { news } = useNewsHook();
   const { location, icons, generateMapHTML, myLocation, fetchZones, handleMessageDistance, isWarning, fetchMaps } = useMapsHooks();
   const { availableDay, setAvailableDay } = useJournalHook();
@@ -43,9 +43,10 @@ export default function Home() {
 
   useFocusEffect(
       useCallback(() => {
+          fetchUser()
           fetchZones()
           fetchMaps()
-      }, [fetchZones, fetchMaps])
+      }, [fetchZones, fetchMaps, fetchUser])
   )
 
   if (!user || !news || !community || !location) {

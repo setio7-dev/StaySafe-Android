@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import * as Location from 'expo-location';
 import userImage from "@/assets/images/maps/user.png";
 import dangerImage from "@/assets/images/maps/danger.png";

@@ -3,6 +3,7 @@ import { SupabaseAPI } from '../server/supabase';
 import ToastMessage from '../utils/toastMessage';
 import { translateError } from '../utils/translateError';
 import { useRouter } from 'expo-router';
+import { PickImage } from '../utils/pickImage';
 
 export default function useAuthHook() {
     const [user, setUser] = useState<authProps | null>(null);
@@ -10,19 +11,22 @@ export default function useAuthHook() {
     const [password, setPassword] = useState<string>("");
     const [email, setEmail] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLoadingProfile, setIsLoadingProfile] = useState<boolean>(false);
+    const [showForm, setShowFrom] = useState<boolean>(false);
+    const [image, setImage] = useState<any>(null);
     const navigate = useRouter();
 
-    useEffect(() => {    
-        const fetchUser = async() => {
-            try {
-                const { data } = await SupabaseAPI.auth.getUser();
-                const { data: authData } = await SupabaseAPI.from("users").select().eq("auth_id", data?.user?.id).single();
-                setUser(authData);
-            } catch (error: any) {
-                console.error(error);
-            }
+    const fetchUser = async () => {
+        try {
+            const { data } = await SupabaseAPI.auth.getUser();
+            const { data: authData } = await SupabaseAPI.from("users").select().eq("auth_id", data?.user?.id).single();
+            setUser(authData);
+        } catch (error: any) {
+            console.error(error);
         }
+    }
 
+    useEffect(() => {
         fetchUser();
     }, [navigate]);
 
@@ -33,51 +37,51 @@ export default function useAuthHook() {
 
             if (!name || !password || !email) {
                 ToastMessage({
-                    type: "error", text: "Data Wajib Diisi!" 
-                });                            
+                    type: "error", text: "Data Wajib Diisi!"
+                });
                 return;
             }
 
             const { data: authData, error: authError } = await SupabaseAPI.auth.signUp({ email, password });
             if (authError) {
-                ToastMessage({ 
-                    type: "error", 
+                ToastMessage({
+                    type: "error",
                     text: translateError(authError.message)
                 });
                 return;
             }
 
             const { error } = await SupabaseAPI.from("users").insert([
-                { 
-                    auth_id: authData.user?.id,  
-                    name, email, 
-                    role: "user" 
+                {
+                    auth_id: authData.user?.id,
+                    name, email,
+                    role: "user"
                 }
             ]);
 
             if (error) {
-                ToastMessage({ 
-                    type: "error", 
+                ToastMessage({
+                    type: "error",
                     text: translateError(error.message),
                 });
                 return;
             }
 
             ToastMessage({
-                type: "success", 
+                type: "success",
                 text: "Daftar Berhasil!"
             });
-            
+
             setName("");
             setEmail("");
             setPassword("");
-            
+
             setTimeout(() => {
                 navigate.replace("/pages/auth/login");
             }, 3000);
         } catch (error: any) {
-            ToastMessage({ 
-                type: "error", 
+            ToastMessage({
+                type: "error",
                 text: translateError(error.message),
             });
         } finally {
@@ -85,15 +89,15 @@ export default function useAuthHook() {
         }
     };
 
-    const handleLogin = async() => {
+    const handleLogin = async () => {
         try {
             if (isLoading) return;
             setIsLoading(true);
 
             if (!password || !email) {
                 ToastMessage({
-                    type: "error", text: "Data Wajib Diisi!" 
-                });                            
+                    type: "error", text: "Data Wajib Diisi!"
+                });
                 return;
             }
 
@@ -128,7 +132,7 @@ export default function useAuthHook() {
         }
     }
 
-    const handleLogout = async() => {
+    const handleLogout = async () => {
         try {
             setIsLoading(true);
             const { error } = await SupabaseAPI.auth.signOut();
@@ -159,17 +163,94 @@ export default function useAuthHook() {
         }
     }
 
-    return { 
-        handleRegister, 
+    const handlePickImage = async () => {
+        const uri = await PickImage();
+        setImage(uri);
+    }
+
+    const handleClose = () => {
+        setShowFrom(false);
+        setName("");
+        setEmail("");
+        setPassword("");
+        setImage(null);
+    }
+
+    const handleUpdateUser = async (id: number) => {
+        try {
+            setIsLoadingProfile(true);
+            let uploadImage = "";
+
+            if (image) {
+                const formData = new FormData();
+                formData.append("upload_preset", "staysafe");
+                formData.append("folder", "profile/post");
+                formData.append("file", {
+                    uri: image,
+                    name: `profile_post${Date.now()}.jpg`,
+                    type: "image/jpeg",
+                } as any);
+
+                const uploadImageCloudinary = await fetch(`https://api.cloudinary.com/v1_1/df9dwfg8r/image/upload`, {
+                    method: "POST",
+                    body: formData
+                });
+
+                const res = await uploadImageCloudinary.json();
+                uploadImage = res.secure_url;
+            }
+
+            await SupabaseAPI.auth.updateUser({
+                email: email || undefined,
+                password: password || undefined
+            });
+
+            await SupabaseAPI
+                .from("users")
+                .update([
+                    {
+                        name: name || undefined,
+                        email: email || undefined,
+                        image: image ? uploadImage : undefined
+                    }
+                ])
+                .eq("id", id)
+                .select()
+                .single();
+
+            ToastMessage({
+                type: "success",
+                text: "Ubah Profile Berhasil!"
+            })
+        } catch (error: any) {
+            ToastMessage({
+                type: "error",
+                text: translateError(error.message)
+            })
+        } finally {
+            setIsLoadingProfile(false);
+        }
+    }
+
+    return {
+        handleRegister,
         handleLogin,
-        name, 
-        email, 
-        password, 
-        setName, 
-        setPassword, 
+        name,
+        email,
+        password,
+        setName,
+        setPassword,
         setEmail,
         isLoading,
+        isLoadingProfile,
         user,
         handleLogout,
+        showForm,
+        setShowFrom,
+        handlePickImage,
+        handleClose,
+        image,
+        handleUpdateUser,
+        fetchUser
     };
 }

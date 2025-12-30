@@ -17,7 +17,7 @@ export const homeData = [
         id: 2,
         image: fitur2,
         name: "Cerita AR",
-        link: ""
+        link: "/pages/bot/ceritaar"
     },
     {
         id: 3,
@@ -57,8 +57,8 @@ export const profileMenu = [
     },
     {
         id: 2,
-        name: "Postingan Saya",
-        link: "",
+        name: "Pesan Saya",
+        link: "/pages/home/mymessage",
         image: post,
     },
 ]
