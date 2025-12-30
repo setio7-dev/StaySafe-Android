@@ -2,16 +2,22 @@ import useCommunityHook from '@/app/hooks/communityHook'
 import CustomSafeAreaView from '@/app/ui/safeAreaView'
 import SearchPrimary from '@/app/ui/searchPrimary';
 import PrimaryGradient from '@/app/utils/primaryGradient';
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import back from "@/assets/images/icon/back.png"
-import { useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import Loader from '@/app/utils/loader';
 import ButtonPrimary from '@/app/ui/buttonPrimary';
 
 export default function Community() {
-    const { community, search, setSearch, handleJoinCommunity, isLoading } = useCommunityHook();
+    const { community, search, setSearch, handleJoinCommunity, isLoading, fetchCommunity } = useCommunityHook();
     const navigate = useRouter();
+
+    useFocusEffect(
+      useCallback(() => {
+        fetchCommunity()
+      }, [fetchCommunity])
+    )
 
     if (!community) {
         return <Loader fullScreen={true} text='Memuat...'/>
@@ -28,7 +34,7 @@ export default function Community() {
           </View>
           <SearchPrimary value={search} onChange={(e) => setSearch(e)} className='translate-y-8 elevation-md'/>
         </PrimaryGradient>
-        <ScrollView contentContainerStyle={{ paddingBottom: 100 }} className='px-6 mt-14'>
+        <ScrollView contentContainerStyle={{ paddingBottom: 50 }} className='px-6 mt-14'>
             <View className='flex-row flex-wrap gap-y-8 justify-between'>
                 {community.length > 0 ? (
                     community.map((item, index) => (

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react'
 import ToastMessage from '../utils/toastMessage';
 import { SupabaseAPI } from '../server/supabase';
@@ -27,29 +28,28 @@ export default function useNewsHook() {
       };
     }, []);
 
+  const fetchNews = async() => {
+      try {
+          const { data } = await SupabaseAPI.from("news").select().order("created_at", { ascending: false });
+          if (search) {
+            const dataBySearch = data.filter((item: any) => {
+              const filter = item.title.toLowerCase().includes(search.toLowerCase()) || item.desc.toLowerCase().includes(search.toLowerCase());
+              return filter;
+            });
+            setNews(dataBySearch);
+          } else {
+            setNews(data);
+          }
+          
+      } catch (error: any) {
+          ToastMessage({
+              type: "error",
+              text: error.message
+          })
+      }
+  }
+
   useEffect(() => {
-    const fetchNews = async() => {
-        try {
-            const { data } = await SupabaseAPI.from("news").select().order("created_at", { ascending: false });
-            if (search) {
-              const dataBySearch = data.filter((item: any) => {
-                const filter = item.title.toLowerCase().includes(search.toLowerCase()) || item.desc.toLowerCase().includes(search.toLowerCase());
-                return filter;
-              });
-
-              setNews(dataBySearch);
-            } else {
-              setNews(data);
-            }
-            
-        } catch (error: any) {
-            ToastMessage({
-                type: "error",
-                text: error.message
-            })
-        }
-    }
-
     const fetchSigleNews = async() => {
       try {
         const { data } = await SupabaseAPI.from("news").select().eq("id", idState).single();
@@ -71,6 +71,7 @@ export default function useNewsHook() {
     search,
     setSearch,
     newsSingle,
-    setIdState
+    setIdState,
+    fetchNews
   }
 }

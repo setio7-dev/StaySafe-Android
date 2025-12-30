@@ -66,25 +66,25 @@ export default function useConsultationHook() {
         };
     }, [idState]);
 
-    useEffect(() => {
-        const fetchDoctor = async () => {
-            try {
-                const { data } = await SupabaseAPI.from("doctor").select(`*, user_id(*)`);
-                if (search) {
-                    const dataFilter = data?.filter((item: doctorProps) => {
-                        const filter = item.user_id.name.toLowerCase().includes(search.toLowerCase());
-                        return filter;
-                    });
+    const fetchDoctor = async () => {
+        try {
+            const { data } = await SupabaseAPI.from("doctor").select(`*, user_id(*)`);
+            if (search) {
+                const dataFilter = data?.filter((item: doctorProps) => {
+                    const filter = item.user_id.name.toLowerCase().includes(search.toLowerCase());
+                    return filter;
+                });
 
-                    setDoctor(dataFilter as any);
-                } else {
-                    setDoctor(data as any);
-                }
-            } catch (error) {
-                console.error(error);
+                setDoctor(dataFilter as any);
+            } else {
+                setDoctor(data as any);
             }
+        } catch (error) {
+            console.error(error);
         }
+    }
 
+    useEffect(() => {
         fetchDoctor();
         fetchSingleConversation();
     }, [search, idState]);
@@ -249,6 +249,7 @@ export default function useConsultationHook() {
         setMessage,
         sheetOverlay,
         handleShowDelete,
-        fetchMyDoctor
+        fetchMyDoctor,
+        fetchDoctor
     }
 }

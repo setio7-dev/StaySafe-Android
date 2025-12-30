@@ -2,16 +2,22 @@ import useConsultationHook from '@/app/hooks/consultationHook'
 import ButtonPrimary from '@/app/ui/buttonPrimary'
 import CustomSafeAreaView from '@/app/ui/safeAreaView'
 import PrimaryGradient from '@/app/utils/primaryGradient'
-import { useRouter } from 'expo-router'
-import React from 'react'
+import { useFocusEffect, useRouter } from 'expo-router'
+import React, { useCallback } from 'react'
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import back from "@/assets/images/icon/back.png"
 import SearchPrimary from '@/app/ui/searchPrimary'
 import Loader from '@/app/utils/loader'
 
 export default function Consultation() {
-    const { doctor, search, setSearch, handlePostConversation } = useConsultationHook();
+    const { doctor, search, setSearch, handlePostConversation, fetchDoctor } = useConsultationHook();
     const navigate = useRouter();
+
+    useFocusEffect(
+        useCallback(() => {
+            fetchDoctor()
+        }, [fetchDoctor])
+    )
 
     if (!doctor) {
         return <Loader fullScreen={true} text='Memuat...'/>
@@ -32,7 +38,7 @@ export default function Consultation() {
             <View className='px-6 flex flex-col gap-6 mt-4'>
                 {doctor.length > 0 ? (
                     doctor.map((item, index) => (
-                        <View key={index} className='bg-white p-4 elevation-sm rounded-lg flex flex-row items-center gap-4'>
+                        <View key={index} className='bg-white p-4 elevation-sm rounded-lg flex flex-row items-center gap-4 h-[130px]'>
                             <Image source={{ uri: item.user_id.image }} className='w-28 h-full rounded-md'/>
                             <View className='flex flex-col flex-1'>
                                 <Text className='font-poppins_semibold text-black text-[16px]'>Dr. {item.user_id.name}</Text>

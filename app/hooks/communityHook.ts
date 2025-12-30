@@ -78,25 +78,25 @@ export default function useCommunityHook() {
         }
     }
 
-    useEffect(() => {
-        const fetchCommunity = async() => {
-            try {
-                const { data }  = await SupabaseAPI.from("communities").select().order("created_at", { ascending: false });
-                if (search) {
-                    const dataFilter = data.filter((item: any) => {
-                        const filter = item.name.toLowerCase().includes(search.toLowerCase());
-                        return filter;
-                    });
+    const fetchCommunity = async() => {
+        try {
+            const { data }  = await SupabaseAPI.from("communities").select().order("created_at", { ascending: false });
+            if (search) {
+                const dataFilter = data.filter((item: any) => {
+                    const filter = item.name.toLowerCase().includes(search.toLowerCase());
+                    return filter;
+                });
 
-                    setCommunity(dataFilter);
-                } else {
-                    setCommunity(data);
-                }
-            } catch (error) {
-                console.error(error);
+                setCommunity(dataFilter);
+            } else {
+                setCommunity(data);
             }
+        } catch (error) {
+            console.error(error);
         }
+    }
 
+    useEffect(() => {
         const fetchSingleCommunity = async() => {
             try {
                 const { data }  = await SupabaseAPI.from("communities").select().eq("id", communitiesId).single();
@@ -284,6 +284,7 @@ export default function useCommunityHook() {
         handleUnPickImage,
         sheetOverlay,
         handleShowDelete,
-        fetchCommunityMember
+        fetchCommunityMember,
+        fetchCommunity
     }
 }
