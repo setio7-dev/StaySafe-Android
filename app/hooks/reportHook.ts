@@ -23,7 +23,7 @@ export default function useReportHook() {
     const fetchReport = async() => {
         try {
             const { data } = await SupabaseAPI.from("report").select().eq("user_id", user?.id);
-            setReport(data);
+            setReport(data as any);
         } catch (error: any) {
             ToastMessage({
                 text: error.message,

@@ -97,25 +97,23 @@ export default function useCommunityHook() {
         }
     }
 
+    const fetchSingleCommunity = async() => {
+        try {
+            const { data }  = await SupabaseAPI.from("communities").select().eq("id", communitiesId).single();
+            const { data: communityMember } = await SupabaseAPI.from("communities_member").select().eq("community_id", communitiesId);
+
+            const userCount = communityMember?.length;
+            setFollower(userCount as any);
+            setSingleCommunity(data);
+        } catch (error) {
+            console.error(error);
+        }
+    }   
+
     useEffect(() => {
-        const fetchSingleCommunity = async() => {
-            try {
-                const { data }  = await SupabaseAPI.from("communities").select().eq("id", communitiesId).single();
-                const { data: communityMember } = await SupabaseAPI.from("communities_member").select().eq("community_id", communitiesId);
-
-                const userCount = communityMember?.length;
-                setFollower(userCount as any);
-                setSingleCommunity(data);
-            } catch (error) {
-                console.error(error);
-            }
-        }        
-
         fetchCommunity();
         fetchSingleCommunity();
         fetchCommunityPost();
-
-        if (!user) return;
         fetchCommunityMember();
     }, [search, communitiesId, user]);
 

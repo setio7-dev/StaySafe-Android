@@ -32,13 +32,13 @@ export default function useNewsHook() {
       try {
           const { data } = await SupabaseAPI.from("news").select().order("created_at", { ascending: false });
           if (search) {
-            const dataBySearch = data.filter((item: any) => {
+            const dataBySearch = data!.filter((item: any) => {
               const filter = item.title.toLowerCase().includes(search.toLowerCase()) || item.desc.toLowerCase().includes(search.toLowerCase());
               return filter;
             });
             setNews(dataBySearch);
           } else {
-            setNews(data);
+            setNews(data as any);
           }
           
       } catch (error: any) {

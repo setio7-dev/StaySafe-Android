@@ -251,6 +251,7 @@ export default function useConsultationHook() {
         sheetOverlay,
         handleShowDelete,
         fetchMyDoctor,
-        fetchDoctor
+        fetchDoctor,
+        fetchSingleConversation
     }
 }

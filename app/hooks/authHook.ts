@@ -4,6 +4,7 @@ import ToastMessage from '../utils/toastMessage';
 import { translateError } from '../utils/translateError';
 import { useRouter } from 'expo-router';
 import { PickImage } from '../utils/pickImage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function useAuthHook() {
     const [user, setUser] = useState<authProps | null>(null);
@@ -18,9 +19,10 @@ export default function useAuthHook() {
 
     const fetchUser = async () => {
         try {
-            const { data } = await SupabaseAPI.auth.getUser();
-            const { data: authData } = await SupabaseAPI.from("users").select().eq("auth_id", data?.user?.id).single();
-            setUser(authData);
+            const data = await AsyncStorage.getItem('user');
+            const dataParse = JSON.parse(data as any);
+
+            setUser(dataParse);
         } catch (error: any) {
             console.error(error);
         }
@@ -101,10 +103,13 @@ export default function useAuthHook() {
                 return;
             }
 
-            const { error } = await SupabaseAPI.auth.signInWithPassword({
+            const { error, data } = await SupabaseAPI.auth.signInWithPassword({
                 email,
                 password
             });
+
+            const { data: user } = await SupabaseAPI.from("users").select().eq("auth_id", data.user?.id).single();
+            await AsyncStorage.setItem('user', JSON.stringify(user));
 
             if (error) {
                 ToastMessage({

@@ -1,8 +1,8 @@
 import useConsultationHook from '@/app/hooks/consultationHook';
 import CustomSafeAreaView from '@/app/ui/safeAreaView';
 import PrimaryGradient from '@/app/utils/primaryGradient';
-import { useLocalSearchParams, useRouter } from 'expo-router'
-import React, { useEffect, useState } from 'react'
+import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Image, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import upload from "@/assets/images/icon/upload.png"
 import back from "@/assets/images/icon/back.png"
@@ -15,10 +15,16 @@ import ImageViewing from 'react-native-image-viewing'
 
 export default function ConsultationMessage() {
   const { id } = useLocalSearchParams();
-  const { setIdState, conversationSingle, handlePickImage, handleUnPickImage, image, user, message, setMessage, handlePostMessage, sheetOverlay, handleShowDelete } = useConsultationHook();
+  const { setIdState, conversationSingle, handlePickImage, handleUnPickImage, image, user, message, setMessage, handlePostMessage, sheetOverlay, handleShowDelete, fetchSingleConversation } = useConsultationHook();
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const navigate = useRouter();
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchSingleConversation()
+    }, [fetchSingleConversation])
+  )
 
   useEffect(() => {
     setIdState(id);

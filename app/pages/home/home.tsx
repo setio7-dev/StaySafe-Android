@@ -109,7 +109,7 @@ export default function Home() {
               <Image source={lapor} resizeMode='cover' className='w-[90px] h-[90px]'/>
               <View className='flex flex-col flex-1'>
                 <Text className='font-poppins_semibold text-white text-[16px]'>Lapor Cepat Sekitarmu</Text>
-                <Text className='font-poppins_medium text-justify text-white text-[10px]'>Lapor kejadian darurat dengan cepat, cukup dengan sekali klik  foto atau lokasi.</Text>
+                <Text className='font-poppins_medium text-justify text-white text-[10px]'>Lapor kejadian darurat dengan cepat, cukup dengan sekali klik.</Text>
                 <TouchableOpacity onPress={() => navigate.push("/pages/reports/report")} className='bg-white rounded-lg w-[80px] flex justify-center items-center py-1.5 mt-4'>
                   <Text className='font-poppins_semibold text-primary text-[14px]'>Lapor</Text>
                 </TouchableOpacity>

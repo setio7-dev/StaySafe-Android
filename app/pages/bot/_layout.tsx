@@ -50,16 +50,6 @@ export default function BootLayout() {
               ),
             }}
           />
-
-          <Tabs.Screen
-            name="mood"
-            options={{
-              title: "Deteksi Perasaan",
-              tabBarIcon: ({ color }) => (
-                <Ionicons name="happy-outline" size={24} color={color} />
-              ),
-            }}
-          />
         </Tabs>
     </View>
   )
