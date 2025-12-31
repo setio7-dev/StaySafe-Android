@@ -10,7 +10,7 @@ import { useFocusEffect } from 'expo-router';
 import { useCallback } from 'react';
 
 export default function Maps() {
-    const { generateMapHTML, location, icons, myLocation, panResponder, suggestionPlace, heightAnim, handleGoToPlace, webViewRef, fetchZones, handleMessageDistance, isWarning, fetchMaps } = useMapsHooks();
+    const { generateMapHTML, location, myLocation, panResponder, suggestionPlace, heightAnim, handleGoToPlace, webViewRef, fetchZones, handleMessageDistance, isWarning, fetchMaps } = useMapsHooks();
     useFocusEffect(
         useCallback(() => {
             fetchZones()
@@ -18,7 +18,7 @@ export default function Maps() {
         }, [fetchZones, fetchMaps])
     )
 
-    if (!location || !icons || !suggestionPlace) {
+    if (!location || !suggestionPlace) {
         return <Loader fullScreen={true} text='Memuat...'/>
     }
     return (
@@ -29,7 +29,7 @@ export default function Maps() {
                 ref={webViewRef}
                 originWhitelist={['*']}
                 source={{
-                    html: generateMapHTML(location?.lat, location?.lng, icons),
+                    html: generateMapHTML(location?.lat, location?.lng),
                 }}
                 style={{ flex: 1 }}
                 scalesPageToFit={false}

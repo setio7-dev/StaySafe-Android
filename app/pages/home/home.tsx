@@ -24,7 +24,7 @@ const { width } = Dimensions.get("window");
 export default function Home() {
   const { user, fetchUser } = useAuthHook();
   const { news } = useNewsHook();
-  const { location, icons, generateMapHTML, myLocation, fetchZones, handleMessageDistance, isWarning, fetchMaps } = useMapsHooks();
+  const { location, generateMapHTML, myLocation, fetchZones, handleMessageDistance, isWarning, fetchMaps } = useMapsHooks();
   const { availableDay, setAvailableDay } = useJournalHook();
   const { community, isLoading, handleJoinCommunity } = useCommunityHook();
   const [currentIndex, setCurrentIndex] = useState<number>(0);
@@ -68,7 +68,7 @@ export default function Home() {
                   <WebView
                       originWhitelist={['*']}
                       source={{
-                          html: generateMapHTML(location?.lat, location?.lng, icons),
+                          html: generateMapHTML(location?.lat, location?.lng),
                       }}
                       style={{ flex: 1 }}
                       scalesPageToFit={false}

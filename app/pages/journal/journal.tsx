@@ -42,6 +42,7 @@ export default function Journal() {
     if (isLoadingLoader) {
         return <Loader fullScreen={true} text='Memuat...' />
     }
+
     return (
         <CustomSafeAreaView>
             <BackPage type={false} title='Jurnal Harian' />
@@ -83,8 +84,10 @@ export default function Journal() {
                                     <TouchableOpacity
                                         disabled={!journalToday || isDisabled}
                                         onPress={() => {
-                                            setSelectedJournal(journalToday);
-                                            setShowDetail(true);
+                                          if (!journalToday) return;
+                                                                                
+                                          setSelectedJournal(journalToday);
+                                          setShowDetail(true);
                                         }}
                                         activeOpacity={0.7}
                                     >

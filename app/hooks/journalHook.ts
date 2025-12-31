@@ -31,7 +31,7 @@ export default function useJournalHook() {
             setIsLoadingLoader(false);
         }, 3000);
 
-        return () => clearTimeout(timer); 
+        return () => clearTimeout(timer);
     }, []);
 
     const fetchJournal = async () => {
@@ -184,9 +184,13 @@ export default function useJournalHook() {
     };
 
     const getJournalByDate = (dateString: string) => {
-        return journal?.find(j =>
-            j.created_at.startsWith(dateString)
-        );
+        return journal?.find(j => {
+            const localDate = new Date(j.created_at)
+                .toISOString()
+                .split("T")[0];
+
+            return localDate === dateString;
+        });
     };
 
     const handleAnalysisGemini = async (moodParent: moodProps[]) => {

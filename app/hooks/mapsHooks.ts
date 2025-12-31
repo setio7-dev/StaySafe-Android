@@ -1,9 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import * as Location from 'expo-location';
-import userImage from "@/assets/images/maps/user.png";
-import dangerImage from "@/assets/images/maps/danger.png";
-import positionImage from "@/assets/images/maps/position.png";
-import { ImageToBase64 } from '@/app/utils/imageConvert';
 import { useEffect, useRef, useState } from 'react';
 import { SupabaseAPI } from '../server/supabase';
 import { usePathname } from 'expo-router';
@@ -12,7 +8,6 @@ import WebView from 'react-native-webview';
 
 export default function useMapsHooks() {
     const [location, setLocation] = useState<any>(null);
-    const [icons, setIcons] = useState<any>(null);
     const [zones, setZones] = useState<zoneProps[]>([]);
     const [myLocation, setMyLocation] = useState<string>("");
     const [heightActive, setHeightActive] = useState(false);
@@ -23,7 +18,7 @@ export default function useMapsHooks() {
     const [suggestionPlace, setSuggestionPlace] = useState<suggestionPlaceProps[]>([]);
     const GEOAPIFY_KEY = "24f813a682d2497e89d434b817408858"
 
-    const generateMapHTML = (lat: number, lng: number, icons: any) => `
+    const generateMapHTML = (lat: number, lng: number) => `
     <!DOCTYPE html>
         <html>
             <head>
@@ -47,19 +42,19 @@ export default function useMapsHooks() {
                   }).addTo(map);
 
                   const userIcon = L.icon({
-                    iconUrl: '${icons?.user}',
+                    iconUrl: 'https://res.cloudinary.com/df9dwfg8r/image/upload/v1767184546/user_grzslo.png',
                     iconSize: [30, 30],
                     iconAnchor: [20, 40],
                   });
 
                   const dangerIcon = L.icon({
-                    iconUrl: '${icons?.danger}',
+                    iconUrl: 'https://res.cloudinary.com/df9dwfg8r/image/upload/v1767184546/danger_kp7kxs.png',
                     iconSize: [32, 32],
                     iconAnchor: [16, 16],
                   });
 
                   const positionIcon = L.icon({
-                    iconUrl: '${icons?.position}',
+                    iconUrl: 'https://res.cloudinary.com/df9dwfg8r/image/upload/v1767184546/position_h3sqit.png',
                     iconSize: [24, 32],
                     iconAnchor: [14, 28],
                   });
@@ -144,7 +139,6 @@ export default function useMapsHooks() {
 
         loadAddress(loc);
         loadSuggestionPlaces(loc);
-        loadIcons();
     };
 
     const loadAddress = async (loc: Location.LocationObject) => {
@@ -182,27 +176,7 @@ export default function useMapsHooks() {
         } catch (e) {
             console.warn("Geoapify error", e);
         }
-    };
-
-    const loadIcons = async () => {
-        try {
-            if (icons) return;
-
-            const [user, danger, position] = await Promise.all([
-                ImageToBase64(userImage),
-                ImageToBase64(dangerImage),
-                ImageToBase64(positionImage),
-            ]);
-
-            setIcons({
-                user: `data:image/png;base64,${user}`,
-                danger: `data:image/png;base64,${danger}`,
-                position: `data:image/png;base64,${position}`,
-            });
-        } catch (e) {
-            console.warn("Load icon error", e);
-        }
-    };
+    };    
 
     useEffect(() => {
         fetchMaps();
@@ -294,7 +268,6 @@ export default function useMapsHooks() {
 
     return {
         location,
-        icons,
         generateMapHTML,
         myLocation,
         suggestionPlace,
