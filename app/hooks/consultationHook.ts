@@ -91,6 +91,7 @@ export default function useConsultationHook() {
     
     const fetchMyDoctor = async () => {
         try {
+            if (!user) return;
             const { data } = await SupabaseAPI.from("conversation").select(`*, receiver(*), message(*, sender(*))`).eq("sender", user?.id).order("created_at", { ascending: false });
             setMyDoctor(data as any);
         } catch (error) {

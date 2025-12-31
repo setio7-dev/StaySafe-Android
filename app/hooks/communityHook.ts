@@ -63,7 +63,7 @@ export default function useCommunityHook() {
     const fetchCommunityPost = async() => {
         try {
             const { data } = await SupabaseAPI.from("communities_post").select(`*, user_id(*)`).eq("community_id", communitiesId).order("created_at", { ascending: true });
-            setPost(data);
+            setPost(data as any);
         } catch (error) {
             console.error(error);
         }
@@ -71,8 +71,9 @@ export default function useCommunityHook() {
 
     const fetchCommunityMember = async() => {
         try {
+            if (!user) return;
             const { data } = await SupabaseAPI.from("communities_member").select(`*, community_id(*)`).eq("user_id", user?.id).order("created_at", { ascending: false });
-            setMyCommunity(data);
+            setMyCommunity(data as any);
         } catch (error) {
             console.error(error);
         }
@@ -82,14 +83,14 @@ export default function useCommunityHook() {
         try {
             const { data }  = await SupabaseAPI.from("communities").select().order("created_at", { ascending: false });
             if (search) {
-                const dataFilter = data.filter((item: any) => {
+                const dataFilter = data?.filter((item: any) => {
                     const filter = item.name.toLowerCase().includes(search.toLowerCase());
                     return filter;
                 });
 
-                setCommunity(dataFilter);
+                setCommunity(dataFilter as any);
             } else {
-                setCommunity(data);
+                setCommunity(data as any);
             }
         } catch (error) {
             console.error(error);
@@ -103,7 +104,7 @@ export default function useCommunityHook() {
                 const { data: communityMember } = await SupabaseAPI.from("communities_member").select().eq("community_id", communitiesId);
 
                 const userCount = communityMember?.length;
-                setFollower(userCount);
+                setFollower(userCount as any);
                 setSingleCommunity(data);
             } catch (error) {
                 console.error(error);

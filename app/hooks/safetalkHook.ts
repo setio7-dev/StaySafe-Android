@@ -7,10 +7,11 @@ import { SupabaseAPI } from '../server/supabase';
 import ToastMessage from '../utils/toastMessage';
 import { translateError } from '../utils/translateError';
 import useJournalHook from './journalHook';
+import { Keyboard } from 'react-native';
 
 export default function useSafeTalkHook() {
     const translateY = useRef(new Animated.Value(0)).current;
-    const [conversation, setConversation] = useState<conversationProps | null>(null);
+    const [conversation, setConversation] = useState<chatbotConverstionProps | null>(null);
     const [chatMessage, setChatMessage] = useState<chatbotMessageProps[] | null>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [message, setMessage] = useState<string>("");
@@ -66,21 +67,23 @@ export default function useSafeTalkHook() {
         try {
             if (!user || !moodAnalysis) return;
             const prompt = `
-                Kamu adalah asisten AI yang peduli dengan kesehatan mental dan psikis seseorang. 
-                Berikan analisis dan saran yang ramah, empatik, dan positif berdasarkan data berikut:
+                Kamu adalah asisten AI bernama "Stay Safe Bot" yang peduli dengan kesehatan mental dan psikis seseorang. 
+                Tugasmu adalah menganalisis jurnal mood pengguna dan memberikan saran yang ramah, empatik, dan positif.
 
-                User: ${user}
-                Jurnal Mood Pengguna: ${moodAnalysis ?? "belum tersedia"}
+                Data pengguna:
+                Pengguna: ${JSON.stringify(user, null, 2)}
+                Jurnal Mood Pengguna: ${JSON.stringify(moodAnalysis, null, 2)}
 
-                Tugasmu:
-                1. Berikan ringkasan keadaan mental user berdasarkan jurnal.
+                Aturan tugasmu:
+                1. Berikan ringkasan keadaan mental pengguna berdasarkan jurnal mood.
                 2. Berikan saran atau tips untuk menjaga kesehatan mental.
                 3. Gunakan bahasa yang ramah, empatik, dan mudah dimengerti.
                 4. Jangan gunakan istilah medis yang rumit.
-                5. Buat jawaban dalam 1-3 paragraf.
+                5. Jawaban maksimal 1-3 paragraf.
+                6. Jangan menjawab pertanyaan di luar topik kesehatan mental.
+                7. Jika pengguna menanyakan identitasmu, jawab singkat: "Saya Stay Safe Bot, asisten AI untuk kesehatan mental."
 
-                Balas sebagai:
-                "Asisten AI Kesehatan Mental":
+                Pertanyaan Pengguna: ${message}
             `;
 
             const response = await GeminiAPI.models.generateContent({
@@ -89,7 +92,16 @@ export default function useSafeTalkHook() {
             });
 
             const parts = response?.candidates?.[0]?.content?.parts;
-            return parts;
+            if (Array.isArray(parts)) {
+                const textArray = parts.map(p => {
+                    if (typeof p === "string") return p;
+                    if (p && typeof p === "object" && "text" in p) return String(p.text);
+                    return "";
+                });
+                return textArray.join("\n").trim();
+            }
+
+            if (typeof parts === "string") return parts;
         } catch (error: any) {
             ToastMessage({
                 type: "error",
@@ -100,12 +112,42 @@ export default function useSafeTalkHook() {
 
     const handleMessage = async () => {
         try {
+            if (!user || !conversation) return;
+            Keyboard.dismiss();
 
+            if (!message) {
+                ToastMessage({
+                    type: "error",
+                    text: "Pesan Harus Diisi!"
+                });
+                return;
+            }
+
+            await SupabaseAPI.from("chatbot_message").insert([
+                {
+                    conversation_id: conversation?.id,
+                    message: message,
+                    role: "user"
+                }
+            ]);
+            setMessage("");
+
+            const handleLogicBot = await handleResponseAI(message);
+            await SupabaseAPI.from("chatbot_message").insert([
+                {
+                    conversation_id: conversation?.id,
+                    message: handleLogicBot,
+                    role: "bot"
+                }
+            ])
+
+            fetchConversation();
         } catch (error: any) {
             ToastMessage({
                 type: "error",
                 text: translateError(error.message)
             })
+            console.error(error)
         }
     }
 
@@ -117,5 +159,6 @@ export default function useSafeTalkHook() {
         isLoading,
         message,
         setMessage,
+        handleMessage
     }
 }

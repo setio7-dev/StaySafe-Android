@@ -21,7 +21,7 @@ export default function MyMessage() {
     }, [user, fetchCommunityMember, fetchMyDoctor])
   );
 
-  if (!myCommunity || !myDoctor || !user) {
+  if (!user) {
     return <Loader fullScreen={true} text='Memuat...'/>
   }
   return (

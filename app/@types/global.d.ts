@@ -195,6 +195,7 @@ declare global {
     id: number;
     message: string;
     conversation_id: number;
+    role: string;
     created_at: any;
   }
 }
