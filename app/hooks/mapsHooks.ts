@@ -47,19 +47,19 @@ export default function useMapsHooks() {
                   }).addTo(map);
 
                   const userIcon = L.icon({
-                    iconUrl: '${icons.user}',
+                    iconUrl: '${icons?.user}',
                     iconSize: [30, 30],
                     iconAnchor: [20, 40],
                   });
 
                   const dangerIcon = L.icon({
-                    iconUrl: '${icons.danger}',
+                    iconUrl: '${icons?.danger}',
                     iconSize: [32, 32],
                     iconAnchor: [16, 16],
                   });
 
                   const positionIcon = L.icon({
-                    iconUrl: '${icons.position}',
+                    iconUrl: '${icons?.position}',
                     iconSize: [24, 32],
                     iconAnchor: [14, 28],
                   });
@@ -123,7 +123,7 @@ export default function useMapsHooks() {
     const fetchZones = async () => {
         try {
             const { data } = await SupabaseAPI.from("zones").select();
-            setZones(data);
+            setZones(data as any);
         } catch (error) {
             console.error(error);
         }
@@ -133,46 +133,76 @@ export default function useMapsHooks() {
         const { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') return;
 
-        const loc = await Location.getCurrentPositionAsync({});
-        const address = await Location.reverseGeocodeAsync({
-            latitude: loc.coords.latitude,
-            longitude: loc.coords.longitude,
-        });
-
-        if (address.length > 0) {
-            const a = address[0];
-            let location = "";
-
-            if (pathname === "/pages/maps/maps") {
-                location = `${a.formattedAddress ?? ''}`;
-            } else {
-                location = `${a.district ?? ''}`;
-            }
-            setMyLocation(location);
-        }
-
-        const categories = "service.police,service.fire_station,service.post.office,healthcare.hospital,healthcare.clinic_or_praxis,office.government";
-        const url = `https://api.geoapify.com/v2/places?categories=${categories}&filter=circle:${loc.coords.longitude},${loc.coords.latitude},700&limit=50&apiKey=${GEOAPIFY_KEY}`;
-        const responsePlace = await fetch(url);
-        const resData = await responsePlace.json();
-        setSuggestionPlace(resData.features)
-
-
-        const userBase64 = await ImageToBase64(userImage);
-        const dangerBase64 = await ImageToBase64(dangerImage);
-        const positionBase64 = await ImageToBase64(positionImage);
-
-        setIcons({
-            user: `data:image/png;base64,${userBase64}`,
-            danger: `data:image/png;base64,${dangerBase64}`,
-            position: `data:image/png;base64,${positionBase64}`,
+        const loc = await Location.getCurrentPositionAsync({
+            accuracy: Location.Accuracy.Balanced,
         });
 
         setLocation({
             lat: loc.coords.latitude,
             lng: loc.coords.longitude,
         });
-    }
+
+        loadAddress(loc);
+        loadSuggestionPlaces(loc);
+        loadIcons();
+    };
+
+    const loadAddress = async (loc: Location.LocationObject) => {
+        try {
+            const address = await Location.reverseGeocodeAsync({
+                latitude: loc.coords.latitude,
+                longitude: loc.coords.longitude,
+            });
+
+            if (address.length > 0) {
+                const a = address[0];
+                const text =
+                    pathname === "/pages/maps/maps"
+                        ? a.formattedAddress ?? ""
+                        : a.district ?? "";
+
+                setMyLocation(text);
+            }
+        } catch (e) {
+            console.warn("Reverse geocode gagal", e);
+        }
+    };
+
+    const loadSuggestionPlaces = async (loc: Location.LocationObject) => {
+        try {
+            const categories =
+                "service.police,service.fire_station,service.post.office,healthcare.hospital,healthcare.clinic_or_praxis,office.government";
+
+            const url = `https://api.geoapify.com/v2/places?categories=${categories}&filter=circle:${loc.coords.longitude},${loc.coords.latitude},700&limit=50&apiKey=${GEOAPIFY_KEY}`;
+
+            const res = await fetch(url);
+            const data = await res.json();
+
+            setSuggestionPlace(data.features ?? []);
+        } catch (e) {
+            console.warn("Geoapify error", e);
+        }
+    };
+
+    const loadIcons = async () => {
+        try {
+            if (icons) return;
+
+            const [user, danger, position] = await Promise.all([
+                ImageToBase64(userImage),
+                ImageToBase64(dangerImage),
+                ImageToBase64(positionImage),
+            ]);
+
+            setIcons({
+                user: `data:image/png;base64,${user}`,
+                danger: `data:image/png;base64,${danger}`,
+                position: `data:image/png;base64,${position}`,
+            });
+        } catch (e) {
+            console.warn("Load icon error", e);
+        }
+    };
 
     useEffect(() => {
         fetchMaps();
