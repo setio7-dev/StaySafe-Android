@@ -26,7 +26,7 @@ export default function useSafeTalkHook() {
     const fetchConversation = async () => {
         try {
             if (!user) return;
-            const { data: currentData } = await SupabaseAPI.from("chatbot_conversation").select(`*, chatbot_message(*)`).eq("user_id", user?.id).maybeSingle();
+            const { data: currentData } = await SupabaseAPI.from("chatbot_conversation").select(`*, chatbot_message(*)`).eq("user_id", user?.id).single();
             if (!currentData) {
                 await SupabaseAPI.from("chatbot_conversation").insert([
                     {
@@ -151,6 +151,8 @@ export default function useSafeTalkHook() {
             setIsPlay(true);
             setMessage("");
             fetchConversation();
+
+            return handleLogicBot;
         } catch (error: any) {
             ToastMessage({
                 type: "error",
@@ -168,10 +170,9 @@ export default function useSafeTalkHook() {
 
             const result = await startSpeechToText();
             setIsListening(false);
-            await handleMessage(result as any);
+            const botReply = await handleMessage(result as any);
 
-            fetchConversation()
-            speakText(conversation?.chatbot_message[conversation.chatbot_message.length - 1].message);
+            speakText(botReply);
             setMessage("");
         } catch (error: any) {
             setIsListening(false);
