@@ -70,7 +70,6 @@ Forum interaktif untuk berbagi pengalaman, dukungan, dan membangun lingkungan di
 
 2. **Install dependencies dan jalankan client**  
 ```bash
-cd frontend
 npm i
 npx expo prebuild
 npx expo run:android
