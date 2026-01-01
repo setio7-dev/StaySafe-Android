@@ -1,6 +1,6 @@
 # 🛡️ Stay Safe – Aplikasi Layanan Kesehatan Mental & Keamanan Modern
 
-![Stay Safe Screenshot](./projects.png)
+![Stay Safe Screenshot](./project.png)
 
 ---
 
@@ -29,9 +29,9 @@ Dengan dukungan teknologi modern, Stay Safe membantu menciptakan lingkungan yang
 | ![React Native](https://img.icons8.com/ultraviolet/48/react.png) **React Native** | Framework utama untuk pengembangan aplikasi mobile lintas platform. |
 | ![NativeWind](https://img.icons8.com/color/48/tailwind_css.png) **NativeWind** | Styling berbasis Tailwind CSS untuk tampilan UI responsif dan modern. |
 | ![TypeScript](https://img.icons8.com/color/48/typescript.png) **TypeScript** | Superset JavaScript untuk pengembangan aplikasi lebih aman dan scalable. |
-| ![Gemini API](https://img.icons8.com/color/48/api.png) **Gemini API** | Backend API untuk integrasi fitur AI dan manajemen data aplikasi. |
+| ![Gemini API](https://res.cloudinary.com/df9dwfg8r/image/upload/v1767281635/gemini_dtxob0.webp) **Gemini API** | Backend API untuk integrasi fitur AI dan manajemen data aplikasi. |
 | ![Supabase](https://img.icons8.com/color/48/supabase.png) **Supabase** | Backend-as-a-Service untuk autentikasi, database, dan penyimpanan real-time. |
-| ![Cloudinary](https://img.icons8.com/color/48/cloudinary.png) **Cloudinary** | Layanan cloud untuk menyimpan, mengelola, dan menampilkan media seperti foto atau audio. |
+| ![Cloudinary](https://res.cloudinary.com/df9dwfg8r/image/upload/v1767281635/cloudinary_wfomp5.png) **Cloudinary** | Layanan cloud untuk menyimpan, mengelola, dan menampilkan media seperti foto atau audio. |
 
 ---
 
