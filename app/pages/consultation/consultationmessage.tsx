@@ -53,9 +53,9 @@ export default function ConsultationMessage() {
           <View className='flex flex-col gap-8 px-6'>
             {conversationSingle!.message?.length > 0 ? (
               conversationSingle?.message.map((item, index) => (
-                <TouchableOpacity onLongPress={() => handleShowDelete(item.sender.id, item.id)} key={index} className={`flex justify-end ${item.sender.id === user.id ? 'flex-row' : 'flex-row-reverse'}`}>
-                  <View className='flex flex-row'>
-                    <PrimaryGradient className='p-4' roundedBottom={12} roundedTop={12}>
+                <TouchableOpacity onLongPress={() => handleShowDelete(item.sender.id, item.id)} key={index} className={`flex ${item.sender.id === user.id ? 'flex-row' : 'flex-row-reverse'}`}>
+                  <View className='flex flex-row flex-1'>
+                    <PrimaryGradient className='p-4 w-full' roundedBottom={12} roundedTop={12}>
                       {item.image && (
                         <TouchableOpacity 
                           activeOpacity={0.9} 
