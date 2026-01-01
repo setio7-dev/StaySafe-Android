@@ -1,4 +1,4 @@
-# 🛡️ Stay Safe – Aplikasi Layanan Kesehatan Mental & Keamanan Modern
+# 🛡️ Stay Safe – Aplikasi Layanan Kesehatan Mental
 
 ![Stay Safe Screenshot](./project.png)
 
