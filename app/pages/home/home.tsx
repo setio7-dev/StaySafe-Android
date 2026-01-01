@@ -24,7 +24,7 @@ const { width } = Dimensions.get("window");
 export default function Home() {
   const { user, fetchUser } = useAuthHook();
   const { news } = useNewsHook();
-  const { location, generateMapHTML, myLocation, fetchZones, handleMessageDistance, isWarningRef, fetchMaps, mapHTML } = useMapsHooks();
+  const { location, myLocation, fetchZones, handleMessageDistance, isWarningRef, fetchMaps, mapHTML } = useMapsHooks();
   const { availableDay, setAvailableDay } = useJournalHook();
   const { community, isLoading, handleJoinCommunity } = useCommunityHook();
   const [currentIndex, setCurrentIndex] = useState<number>(0);

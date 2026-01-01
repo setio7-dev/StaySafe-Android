@@ -10,7 +10,7 @@ import { useFocusEffect } from 'expo-router';
 import { useCallback } from 'react';
 
 export default function Maps() {
-    const { generateMapHTML, location, myLocation, panResponder, suggestionPlace, heightAnim, handleGoToPlace, webViewRef, fetchZones, handleMessageDistance, isWarningRef, fetchMaps, mapHTML } = useMapsHooks();
+    const { location, myLocation, panResponder, suggestionPlace, heightAnim, handleGoToPlace, webViewRef, fetchZones, handleMessageDistance, isWarningRef, fetchMaps, mapHTML } = useMapsHooks();
     useFocusEffect(
         useCallback(() => {
             fetchZones()

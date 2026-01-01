@@ -269,7 +269,7 @@ export default function useMapsHooks() {
     const mapHTML = useMemo(() => {
       if (!location) return '';
       return generateMapHTML(location.lat, location.lng);
-    }, []);
+    }, [location]);
 
     return {
         location,
