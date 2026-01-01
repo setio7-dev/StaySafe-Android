@@ -10,7 +10,7 @@ import { useFocusEffect } from 'expo-router';
 import { useCallback } from 'react';
 
 export default function Maps() {
-    const { generateMapHTML, location, myLocation, panResponder, suggestionPlace, heightAnim, handleGoToPlace, webViewRef, fetchZones, handleMessageDistance, isWarning, fetchMaps } = useMapsHooks();
+    const { generateMapHTML, location, myLocation, panResponder, suggestionPlace, heightAnim, handleGoToPlace, webViewRef, fetchZones, handleMessageDistance, isWarningRef, fetchMaps, mapHTML } = useMapsHooks();
     useFocusEffect(
         useCallback(() => {
             fetchZones()
@@ -29,7 +29,7 @@ export default function Maps() {
                 ref={webViewRef}
                 originWhitelist={['*']}
                 source={{
-                    html: generateMapHTML(location?.lat, location?.lng),
+                    html: mapHTML,
                 }}
                 style={{ flex: 1 }}
                 scalesPageToFit={false}
@@ -47,7 +47,7 @@ export default function Maps() {
                     <Image source={userImage} className='w-8 h-8'/>
                     <Text className='font-poppins_medium text-black text-[12px] flex-1 text-justify'>{myLocation}</Text>
                 </View>
-                {isWarning && (
+                {isWarningRef.current && (
                     <View className='bg-red/30 border-2 rounded-lg border-red p-4 mt-6 flex flex-row gap-4 justify-center items-center'>
                         <Image source={dangerImage} className='w-20 h-20'/>
                         <View className='flex flex-col flex-1'>

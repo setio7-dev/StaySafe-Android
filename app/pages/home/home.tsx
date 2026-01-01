@@ -24,7 +24,7 @@ const { width } = Dimensions.get("window");
 export default function Home() {
   const { user, fetchUser } = useAuthHook();
   const { news } = useNewsHook();
-  const { location, generateMapHTML, myLocation, fetchZones, handleMessageDistance, isWarning, fetchMaps } = useMapsHooks();
+  const { location, generateMapHTML, myLocation, fetchZones, handleMessageDistance, isWarningRef, fetchMaps, mapHTML } = useMapsHooks();
   const { availableDay, setAvailableDay } = useJournalHook();
   const { community, isLoading, handleJoinCommunity } = useCommunityHook();
   const [currentIndex, setCurrentIndex] = useState<number>(0);
@@ -68,7 +68,7 @@ export default function Home() {
                   <WebView
                       originWhitelist={['*']}
                       source={{
-                          html: generateMapHTML(location?.lat, location?.lng),
+                          html: mapHTML,
                       }}
                       style={{ flex: 1 }}
                       scalesPageToFit={false}
@@ -82,8 +82,8 @@ export default function Home() {
                     <Text className='text-primary text-[16px] font-poppins_semibold'>{myLocation}</Text>
                     <Text className='text-gray text-[10px] font-poppins_medium'>Status</Text>
                     <View className='flex flex-row gap-2 items-center'>
-                      <View className={`${isWarning ? 'bg-red' : 'bg-green'} p-1.5 rounded-full`}/>
-                      <Text className={`${isWarning ? 'text-red' : 'text-green'} text-[12px] font-poppins_medium`}>{isWarning ? 'Waspada' : 'Aman'}</Text>
+                      <View className={`${isWarningRef.current ? 'bg-red' : 'bg-green'} p-1.5 rounded-full`}/>
+                      <Text className={`${isWarningRef.current ? 'text-red' : 'text-green'} text-[12px] font-poppins_medium`}>{isWarningRef.current ? 'Waspada' : 'Aman'}</Text>
                     </View>
                   </View>
                   <View className='flex flex-row justify-between items-end'>

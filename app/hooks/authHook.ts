@@ -149,6 +149,7 @@ export default function useAuthHook() {
                 return;
             }
 
+            await AsyncStorage.removeItem('user');
             ToastMessage({
                 type: "success",
                 text: "Keluar Berhasil!"

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import * as Location from 'expo-location';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { SupabaseAPI } from '../server/supabase';
 import { usePathname } from 'expo-router';
 import { Animated, PanResponder } from 'react-native';
@@ -13,7 +13,7 @@ export default function useMapsHooks() {
     const [heightActive, setHeightActive] = useState(false);
     const heightAnim = useRef(new Animated.Value(240)).current;
     const webViewRef = useRef<WebView>(null);
-    const [isWarning, setIsWarning] = useState(false);
+    const isWarningRef = useRef(false);
     const pathname = usePathname();
     const [suggestionPlace, setSuggestionPlace] = useState<suggestionPlaceProps[]>([]);
     const GEOAPIFY_KEY = "24f813a682d2497e89d434b817408858"
@@ -243,7 +243,7 @@ export default function useMapsHooks() {
         try {
             const data = JSON.parse(event.nativeEvent.data);
             if (data.type === 'DANGER_ZONE') {
-                setIsWarning(data.value);
+                isWarningRef.current = data.value;
             }
         } catch { }
     }
@@ -266,6 +266,11 @@ export default function useMapsHooks() {
         return () => subscriber?.remove();
     }, []);
 
+    const mapHTML = useMemo(() => {
+      if (!location) return '';
+      return generateMapHTML(location.lat, location.lng);
+    }, []);
+
     return {
         location,
         generateMapHTML,
@@ -277,7 +282,8 @@ export default function useMapsHooks() {
         panResponder,
         fetchZones,
         handleMessageDistance,
-        isWarning,
-        fetchMaps
+        isWarningRef,
+        fetchMaps,
+        mapHTML
     }
 }
