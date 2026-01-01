@@ -66,7 +66,7 @@ Forum interaktif untuk berbagi pengalaman, dukungan, dan membangun lingkungan di
 ## 🧭 Cara Menjalankan Proyek (Development Client Side)
 
 1. **Download project frontend**  
-   [Klik link ini untuk mengunduh](https://drive.google.com/drive/u/2/folders/1rgA48OFl6_jfk0VQ2n71R-0YgQlU1bmZ)  
+   [Klik link ini untuk mengunduh](https://drive.google.com/drive/folders/1rgA48OFl6_jfk0VQ2n71R-0YgQlU1bmZ?usp=drive_link)  
 
 2. **Install dependencies dan jalankan client**  
 ```bash
