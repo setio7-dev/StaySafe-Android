@@ -35,7 +35,7 @@ Dengan dukungan teknologi modern, Stay Safe membantu menciptakan lingkungan yang
 
 ---
 
-## ✨ Fitur Utama (V2)
+## ✨ Fitur Utama
 
 ### 🛰️ 1. Pantau Sekitar
 Menampilkan peta interaktif yang menunjukkan zona aman, rawan, dan berbahaya secara real-time serta memberikan rute evakuasi terdekat untuk membantu pengguna bergerak ke titik aman dengan cepat.
