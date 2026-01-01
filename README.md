@@ -1,50 +1,76 @@
-# Welcome to your Expo app 👋
+# 🛡️ Stay Safe – Aplikasi Layanan Kesehatan Mental & Keamanan Modern
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+![Stay Safe Screenshot](./projects.png)
 
-## Get started
+---
 
-1. Install dependencies
+## 🩺 Deskripsi
 
-   ```bash
-   npm install
-   ```
+**Stay Safe** adalah aplikasi mobile yang dirancang untuk membantu masyarakat menjaga **kesehatan mental** dan keamanan secara **cepat**, **aman**, dan **responsif**.  
+Aplikasi ini menghadirkan fitur-fitur penting untuk mendukung kesejahteraan emosional dan perlindungan pengguna, seperti:
 
-2. Start the app
+- **Pantau Sekitar**: menampilkan peta interaktif dengan zona aman, rawan, dan berbahaya secara real-time serta memberikan rute evakuasi terdekat.  
+- **SafeTalk AI**: interaksi chatbot dan voicebot berbasis AI untuk mengekspresikan perasaan, mendapatkan respons awal, dan mengurangi stres atau kecemasan.  
+- **Konsultasi Profesional**: ruang online untuk berinteraksi dengan psikolog atau tenaga ahli secara aman dan rahasia.  
+- **Meditasi & Relaksasi**: panduan audio meditasi untuk menenangkan pikiran, mengurangi stres, dan meningkatkan fokus.  
+- **Jurnal Harian**: fitur untuk mencatat mood, perasaan, dan kegiatan harian guna memantau kondisi mental secara rutin.  
+- **Lapor Cepat**: pelaporan situasi darurat dengan satu sentuhan, lengkap dengan lokasi dan bukti untuk mempercepat respon.  
+- **Berita**: menyajikan informasi terkini seputar kesehatan mental, keamanan, dan kondisi sosial dari sumber tepercaya.  
+- **Komunitas Digital**: forum interaktif untuk berbagi pengalaman, dukungan, dan membangun solidaritas dalam menghadapi tantangan mental dan sosial.
 
-   ```bash
-   npx expo start
-   ```
+Dengan dukungan teknologi modern, Stay Safe membantu menciptakan lingkungan yang lebih **tenang**, **sehat**, dan **peduli** terhadap kesehatan mental pengguna.
 
-In the output, you'll find options to open the app in a
+---
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## 🚀 Teknologi yang Digunakan
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+| Teknologi | Deskripsi Singkat |
+|-----------|-----------------|
+| ![React Native](https://img.icons8.com/ultraviolet/48/react.png) **React Native** | Framework utama untuk pengembangan aplikasi mobile lintas platform. |
+| ![NativeWind](https://img.icons8.com/color/48/tailwind_css.png) **NativeWind** | Styling berbasis Tailwind CSS untuk tampilan UI responsif dan modern. |
+| ![TypeScript](https://img.icons8.com/color/48/typescript.png) **TypeScript** | Superset JavaScript untuk pengembangan aplikasi lebih aman dan scalable. |
+| ![Gemini API](https://img.icons8.com/color/48/api.png) **Gemini API** | Backend API untuk integrasi fitur AI dan manajemen data aplikasi. |
+| ![Supabase](https://img.icons8.com/color/48/supabase.png) **Supabase** | Backend-as-a-Service untuk autentikasi, database, dan penyimpanan real-time. |
+| ![Cloudinary](https://img.icons8.com/color/48/cloudinary.png) **Cloudinary** | Layanan cloud untuk menyimpan, mengelola, dan menampilkan media seperti foto atau audio. |
 
-## Get a fresh project
+---
 
-When you're ready, run:
+## ✨ Fitur Utama (V2)
 
+### 🛰️ 1. Pantau Sekitar
+Menampilkan peta interaktif yang menunjukkan zona aman, rawan, dan berbahaya secara real-time serta memberikan rute evakuasi terdekat untuk membantu pengguna bergerak ke titik aman dengan cepat.
+
+### 🧠 2. SafeTalk AI
+Interaksi berbasis AI melalui chatbot dan voicebot untuk mengekspresikan perasaan, mendapatkan respons awal yang suportif, dan mengurangi stres, kecemasan, serta rasa kesepian.
+
+### 👩‍⚕️ 3. Konsultasi Profesional
+Ruang online aman untuk berdiskusi dengan psikolog atau tenaga ahli, mendukung proses pemulihan mental dan peningkatan kesadaran akan pentingnya mencari bantuan profesional.
+
+### 🌿 4. Meditasi & Relaksasi
+Panduan audio dan instruksi meditasi yang bisa diakses kapan saja untuk menenangkan pikiran, meningkatkan fokus, dan menjaga keseimbangan emosi.
+
+### 📓 5. Jurnal Harian
+Fitur untuk mencatat perasaan, mood, dan kegiatan harian, membantu pengguna memantau kondisi mental secara rutin dan mendorong refleksi diri.
+
+### 🚨 6. Lapor Cepat
+Melaporkan situasi darurat dengan cepat, lengkap lokasi dan bukti pendukung, serta menjadi jembatan komunikasi efektif dengan layanan darurat.
+
+### 📰 7. Berita
+Menyajikan informasi terkini seputar kesehatan mental, keamanan, dan kondisi sosial dari sumber tepercaya dengan tampilan yang sederhana dan mudah diikuti.
+
+### 🤝 8. Komunitas Digital
+Forum interaktif untuk berbagi pengalaman, dukungan, dan membangun lingkungan digital yang positif, inklusif, dan peduli terhadap kesehatan mental.
+
+---
+
+## 🧭 Cara Menjalankan Proyek (Development Client Side)
+
+1. **Download project frontend**  
+   [Klik link ini untuk mengunduh](https://drive.google.com/drive/u/2/folders/1rgA48OFl6_jfk0VQ2n71R-0YgQlU1bmZ)  
+
+2. **Install dependencies dan jalankan client**  
 ```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+cd frontend
+npm i
+npx expo prebuild
+npx expo run:android
