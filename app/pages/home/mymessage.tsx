@@ -64,7 +64,7 @@ export default function MyMessage() {
                     <View className='flex flex-col'>
                       <Text className='text-black font-poppins_semibold text-[14px]'>Dr. {item.receiver.name}</Text>
                       {item.message[item.message.length - 1]?.message ? (
-                        <Text className='text-gray font-poppins_medium text-[12px]'>{item.message[item.message.length - 1]?.sender?.name}: {item.message[item.message.length - 1]?.message}</Text>
+                        <Text className='text-gray font-poppins_medium text-[12px]'>{item.message[item.message.length - 1]?.sender?.name}: {item.message[item.message.length - 1]?.message.slice(0, 16) + "..."}</Text>
                       ) : (
                         <Text className='text-gray font-poppins_medium text-[12px]'>Belum Ada Pesan</Text>
                       )}
