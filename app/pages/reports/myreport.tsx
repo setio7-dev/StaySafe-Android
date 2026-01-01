@@ -29,7 +29,7 @@ export default function MyReport() {
               report.map((item, index) => (
                 <View key={index} className={`p-4 bg-white border-2 ${item.status === "menunggu" ? "border-orange-400" : item.status === "diterima" ? "border-green" : "border-red"} rounded-lg flex flex-row gap-6`}>
                   <Image source={{ uri: item.image }} className='w-20 rounded-md'/>
-                  <View className='flex flex-col'>
+                  <View className='flex flex-col flex-1'>
                     <Text className='text-black font-poppins_semibold text-[14px]'>{item.title}</Text>
                     <Text className='text-black font-poppins_medium text-[12px]'>Lokasi: {item.location}</Text>
                     <Text className={`${item.status === "menunggu" ? "bg-orange-500/30 text-orange-500" : item.status === "diterima" ? "bg-green/30 text-green" : "bg-red/30 text-red"} mt-2 text-center w-[90px] py-2 rounded-lg font-poppins_medium text-[12px]`}>{item.status}</Text>
