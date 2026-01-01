@@ -63,13 +63,24 @@ Forum interaktif untuk berbagi pengalaman, dukungan, dan membangun lingkungan di
 
 ---
 
-## 🧭 Cara Menjalankan Proyek (Development Client Side)
+## 🚀 Jalankan Aplikasi Secara Langsung
 
 1. **Download Aplikasi**  
    [Klik link ini untuk mengunduh](https://drive.google.com/drive/folders/1rgA48OFl6_jfk0VQ2n71R-0YgQlU1bmZ?usp=drive_link)  
+
+---
+
+## 🧭 Cara Menjalankan Proyek (Development Client Side)
+
+1. **Clone repository**  
+```bash
+git clone https://github.com/setio7-dev/StaySafe-Android
+cd StaySafe-Android
+```
 
 2. **Install dependencies dan jalankan client**  
 ```bash
 npm i
 npx expo prebuild
 npx expo run:android
+```
