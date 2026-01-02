@@ -211,7 +211,7 @@ export default function useAuthHook() {
                 password: password || undefined
             });
 
-            await SupabaseAPI
+            const { data: updatedUser } = await SupabaseAPI
                 .from("users")
                 .update([
                     {
@@ -223,6 +223,8 @@ export default function useAuthHook() {
                 .eq("id", id)
                 .select()
                 .single();
+
+            await AsyncStorage.setItem('user', JSON.stringify(updatedUser));
 
             ToastMessage({
                 type: "success",
