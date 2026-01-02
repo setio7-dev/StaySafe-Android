@@ -51,7 +51,6 @@ export default function useJournalHook() {
                 .select()
                 .eq("user_id", user?.id)
                 .not("suggestion", "is", null)
-                .order("created_at", { ascending: false })
 
             setMoodAnalysis(activeAnalysis)
         } catch (error) {
