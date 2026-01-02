@@ -274,7 +274,7 @@ export default function useJournalHook() {
             if (!activeAnalysis) {
                 ToastMessage({
                     type: "error",
-                    text: "Jurnal Kamu Sudah Dianalisis / Belum Dianalisis!"
+                    text: "Jurnal Kamu Sudah Dianalisis!"
                 })
                 return;
             }
