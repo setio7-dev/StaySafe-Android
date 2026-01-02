@@ -285,14 +285,6 @@ export default function useJournalHook() {
                 .eq("user_id", user?.id)
                 .eq("mood_analysis_id", activeAnalysis.id)
 
-            if (activeMood!.length < 6) {
-                ToastMessage({
-                    type: "error",
-                    text: "Analisis Jurnal Kamu Belum Tersedia, Tunggulah Beberapa Hari Lagi"
-                })
-                return;
-            }
-
             const analysisResult = await handleAnalysisGemini(activeMood as any);
             await SupabaseAPI.from("mood_analysis").update([
                 {
