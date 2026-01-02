@@ -5,7 +5,7 @@ import { SupabaseAPI } from '../server/supabase';
 import ToastMessage from '../utils/toastMessage';
 import { translateError } from '../utils/translateError';
 import { usePathname, useRouter } from 'expo-router';
-import GeminiAPI from '../server/gemini';
+import { useGemini } from '../server/gemini';
 
 export default function useJournalHook() {
     const [journal, setJournal] = useState<moodProps[] | null>([]);
@@ -16,6 +16,7 @@ export default function useJournalHook() {
     const [desc, setDesc] = useState<string>("");
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingLoader, setIsLoadingLoader] = useState(true);
+    const GeminiAPI = useGemini();
     const { user } = useAuthHook();
     const navigate = useRouter();
     const location = usePathname();
@@ -226,7 +227,7 @@ export default function useJournalHook() {
               "statistic": "isi persentase dari mood yang dominan (1 mood aja dan hanya angka)"
             }`;
 
-            const response = await GeminiAPI.models.generateContent({
+            const response = await GeminiAPI?.models.generateContent({
                 model: "gemini-2.5-flash",
                 contents: prompt,
             });

@@ -2,7 +2,7 @@
 import { Animated, Keyboard } from 'react-native';
 import { useRef, useEffect, useState } from 'react';
 import useAuthHook from './authHook';
-import GeminiAPI from '../server/gemini';
+import { useGemini } from '../server/gemini';
 import { SupabaseAPI } from '../server/supabase';
 import ToastMessage from '../utils/toastMessage';
 import { translateError } from '../utils/translateError';
@@ -22,6 +22,7 @@ export default function useSafeTalkHook() {
     const [isPlay, setIsPlay] = useState(false);
     const [typingMessageId, setTypingMessageId] = useState<any>(null);
     const [typingText, setTypingText] = useState("");
+    const GeminiAPI = useGemini();
 
     const fetchConversation = async () => {
         try {
@@ -91,7 +92,7 @@ export default function useSafeTalkHook() {
                 Pertanyaan Pengguna: ${message}
             `;
 
-            const response = await GeminiAPI.models.generateContent({
+            const response = await GeminiAPI?.models.generateContent({
                 model: "gemini-2.5-flash",
                 contents: prompt,
             });
@@ -112,6 +113,7 @@ export default function useSafeTalkHook() {
                 type: "error",
                 text: translateError(error.message)
             })
+            console.error(error);
         }
     }
 
@@ -158,6 +160,7 @@ export default function useSafeTalkHook() {
                 type: "error",
                 text: translateError(error.message)
             })
+            console.error(error);
         } finally {
             setIsLoading(false);
         }
