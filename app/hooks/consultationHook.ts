@@ -105,7 +105,7 @@ export default function useConsultationHook() {
 
     const handlePostConversation = async (receiverId: number) => {
         try {
-            const { data: checkConversation } = await SupabaseAPI.from("conversation").select().eq("receiver", receiverId).single();
+            const { data: checkConversation } = await SupabaseAPI.from("conversation").select().eq("sender", user?.id).eq("receiver", receiverId).single();
             if (checkConversation) {
                 navigate.push({ pathname: "/pages/consultation/consultationmessage", params: { id: checkConversation.id } })
                 return;
